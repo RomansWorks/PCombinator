@@ -1,13 +1,14 @@
 [build-system]
-requires = ["setuptools", "wheel", "build"]
-build-backend = "build"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "LLMPromptComposer"
 version = "0.0.1"
 description = "A Python package for composing LLM prompts"
-authors = ["Roman"]
+authors = ["Roman Baron"]
 license = "MIT"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
