@@ -29,4 +29,4 @@ class Combinator:
             rendered_children.append(rendered_child)
             rendered_children_id_tree[child.get_id()] = rendered_child_id_tree
 
-        return rendered_children, rendered_child_id_tree
+        return rendered_children, rendered_children_id_tree

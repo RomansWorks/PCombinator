@@ -1,5 +1,6 @@
 import unittest
-from combinator import Combinator
+from src.combinators.combinator import Combinator
+from src.combinators.fixed_string_combinator import FixedStringCombinator
 
 
 class CombinatorTest(unittest.TestCase):
@@ -9,8 +10,16 @@ class CombinatorTest(unittest.TestCase):
             combinator.render()
 
     def test_render_children(self):
-        with self.assertRaises(NotImplementedError):
-            Combinator.render_children([])
+        # Arrange
+        children = ["abc", "def", FixedStringCombinator("ghi")]
+        combinator = Combinator("id1")
+
+        # Act
+        rendered_text, id_tree = combinator.render_children(children)
+
+        # Assert
+        self.assertEqual(rendered_text, [])
+        self.assertEqual(id_tree, {})
 
 
 if __name__ == "__main__":

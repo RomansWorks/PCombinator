@@ -16,7 +16,7 @@ class TemplateCombinator(Combinator):
         # Get an ordered list of keys to match render results
         keys = self.children.keys()
         children_as_list = [self.children[k] for k in keys]
-        rendered_children, rendered_child_id_tree = super().render_children(
+        rendered_children, rendered_child_id_tree = self.render_children(
             children_as_list
         )
         rendered_children_dict = dict(zip(keys, rendered_children))

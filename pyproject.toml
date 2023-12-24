@@ -3,9 +3,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "LLMPromptComposer"
+name = "PCombinator"
 version = "0.0.1"
-description = "A Python package for composing LLM prompts"
+description = "A tool for composing variations of prompts"
 authors = ["Roman Baron"]
 license = "MIT"
 readme = "README.md"

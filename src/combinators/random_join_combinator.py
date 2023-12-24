@@ -1,11 +1,11 @@
-from ast import List
 import random
+from typing import List, Union
 
 from src.combinators.combinator import Combinator, IdTree
 
 
 class RandomJoinCombinator(Combinator):
-    children: List["Combinator" | str]
+    children: List[Union["Combinator", str]]
 
     def __init__(
         self,
@@ -13,7 +13,7 @@ class RandomJoinCombinator(Combinator):
         n_max: int = 1,
         separator: str = "\n",
         seed: int | None = None,  # TODO: Determine if seed is better placed at render()
-        children: List["Combinator" | str] = [],
+        children: List[Union["Combinator", str]] = [],
         id: str = None,
     ):
         super().__init__(id=id)

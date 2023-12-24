@@ -1,35 +1,28 @@
 import unittest
+from src.combinators.random_join_combinator import RandomJoinCombinator
 from src.combinators.template_combinator import TemplateCombinator
 
 
 class TemplateCombinatorTests(unittest.TestCase):
     def test_render(self):
         # Create a TemplateCombinator instance
-        template_combinator = TemplateCombinator()
+        template_combinator = TemplateCombinator(
+            "{{role}}\n{{task}}\n{{question}}\n",
+            {
+                "role": "value_1",
+                "task": "value_2",
+                "question": RandomJoinCombinator(1, 1, ["option_1"], "\n"),
+            },
+        )
 
-        # Set up the children dictionary
-        template_combinator.children = {
-            "key1": "value1",
-            "key2": "value2",
-            "key3": "value3",
-        }
-
-        # Set up the template
-        template_combinator.template = "Hello {key1}, {key2}, {key3}!"
-
-        # Call the render method
+        # Render
         result, id_tree = template_combinator.render()
 
         # Check the result
-        self.assertEqual(result, "Hello value1, value2, value3!")
-
-        # Check the id tree
-        expected_id_tree = {
-            template_combinator.id: {"key1": {}, "key2": {}, "key3": {}}
-        }
-        self.assertEqual(id_tree, expected_id_tree)
-
-    # Add more test cases as needed
+        self.assertEqual(
+            result,
+            "value_1\nvalue_2\noption_1\n",
+        )
 
 
 if __name__ == "__main__":
