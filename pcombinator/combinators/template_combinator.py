@@ -1,10 +1,14 @@
 from typing import Dict
 from jinja2 import Template
 
-from src.combinators.combinator import Combinator, IdTree
+from pcombinator.combinators.combinator import Combinator, IdTree, render_children
 
 
 class TemplateCombinator(Combinator):
+    """
+    A combinator that renders a template with its rendered children as arguments.
+    """
+
     children: Dict[str, "Combinator"]
 
     def __init__(self, template: Template, children: Dict[str, "Combinator"], id=None):
@@ -13,16 +17,22 @@ class TemplateCombinator(Combinator):
         self.children = children
 
     def render(self) -> (str, IdTree):
-        # Get an ordered list of keys to match render results
-        keys = self.children.keys()
-        children_as_list = [self.children[k] for k in keys]
-        rendered_children, rendered_child_id_tree = self.render_children(
-            children_as_list
-        )
-        rendered_children_dict = dict(zip(keys, rendered_children))
-        res = self.template.render(rendered_children_dict)
+        """
+        Render the template, passing the rendered children as arguments.
 
-        return res, {self.id: rendered_child_id_tree}
+        Returns:
+            rendered: The rendered template
+            rendered_id_tree: An IdTree of rendered children under this combinator id.
+        """
+        rendered_children_dict = {}
+        res_id_tree = {self.id: {}}
+        for key in self.children.keys():
+            rendered, id_tree = render_children([self.children[key]])
+            res_id_tree[self.id][key] = id_tree
+            rendered_children_dict[key] = rendered[0]
+
+        res = self.template.render(rendered_children_dict)
+        return res, res_id_tree
 
     def add_child(self, key: str, child: "Combinator") -> None:
         self.children[key] = child

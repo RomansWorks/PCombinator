@@ -1,12 +1,16 @@
 from typing import List, Union
-from src.combinators.combinator import Combinator
-from src.combinators.random_join_combinator import RandomJoinCombinator
+from pcombinator.combinators.combinator import Combinator
+from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
 
 
 class OneOfCombinator(RandomJoinCombinator):
+    """
+    On render, this combinator will randomly select one of the children and render it.
+    """    
+
     def __init__(
         self,
-        seed: int | None = None,
+        seed: Union[int, None] = None,
         children: List[Union[Combinator, str]] = [],
         id: str = None,
     ):

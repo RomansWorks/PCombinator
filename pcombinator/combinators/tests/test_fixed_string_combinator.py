@@ -1,12 +1,12 @@
 import unittest
-from src.combinators.fixed_string_combinator import FixedStringCombinator
+from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
 
 
 class FixedStringCombinatorTest(unittest.TestCase):
     def test_render(self):
         string = "Hello, World!"
-        combinator = FixedStringCombinator(string)
-        expected_output = (string, {combinator.id: {}})
+        combinator = FixedStringCombinator(string, "id1")
+        expected_output = (string, {'id1': {}})
         self.assertEqual(combinator.render(), expected_output)
 
 

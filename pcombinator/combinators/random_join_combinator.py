@@ -1,10 +1,16 @@
 import random
 from typing import List, Union
 
-from src.combinators.combinator import Combinator, IdTree
+from pcombinator.combinators.combinator import Combinator, IdTree, render_children
 
 
 class RandomJoinCombinator(Combinator):
+    """
+    On render, this combinator will randomly select a number of children between n_min and n_max (inclusive)
+    and join them with the separator.
+    """
+
+
     children: List[Union["Combinator", str]]
 
     def __init__(
@@ -12,7 +18,7 @@ class RandomJoinCombinator(Combinator):
         n_min: int = 1,
         n_max: int = 1,
         separator: str = "\n",
-        seed: int | None = None,  # TODO: Determine if seed is better placed at render()
+        seed: Union[int, None] = None,  # TODO: Determine if seed is better placed at render()
         children: List[Union["Combinator", str]] = [],
         id: str = None,
     ):
@@ -32,7 +38,7 @@ class RandomJoinCombinator(Combinator):
         selected_children = random.sample(self.children, n_children)
 
         # Render children
-        rendered_children, rendered_child_id_tree = super().render_children(
+        rendered_children, rendered_child_id_tree = render_children(
             selected_children
         )
 
@@ -42,10 +48,10 @@ class RandomJoinCombinator(Combinator):
         # Return
         return rendered, {self.id: rendered_child_id_tree}
 
-    def add_child(self, child: Combinator | str) -> None:
+    def add_child(self, child: Union[Combinator, str]) -> None:
         self.children.append(child)
 
-    def get_children(self) -> List[Combinator | str]:
+    def get_children(self) -> List[Union[Combinator, str]]:
         return self.children
 
     def remove_child_by_id(self, id: str) -> None:

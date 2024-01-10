@@ -17,3 +17,10 @@ Ingredients have a type to make it easier to evaluate which type of ingredient c
 5. Add tests
 6. Add examples
 7. Add serialization for Combinators 
+8. Decide if strings need an identifier in the IdTree for compatibility with the PromptBase library and PromptEvaluator. 
+9. Normalize convention around internal fields.
+
+
+Fix:
+1. Does render add own id to the id tree or does the render_children add it for the children?
+2. How do Ids and keys work together in the idtree?

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Dict, List
-from src.combinators.combinator import Combinator, IdTree
+from pcombinator.combinators.combinator import Combinator, IdTree
 import json
 
 

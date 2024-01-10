@@ -1,6 +1,5 @@
 from typing import List
-import src.prompt_combinator as pc
-from src.types import Ingredient
+from pcombinator.types import Ingredient
 
 def main():
     ingredients : List[Ingredient]= [
