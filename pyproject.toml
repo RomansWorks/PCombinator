@@ -1,21 +1,24 @@
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry]
 name = "PCombinator"
 version = "0.0.1"
 description = "A tool for composing variations of prompts"
-authors = ["Roman Baron"]
-license = "MIT"
+authors = ["Roman Baron <1299323+RomansWorks@users.noreply.github.com>"]
+license = "Apache 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-jinja2 = "^3.1.2"
+versioned_collection = "^0.0.1"
+jinja2 = {version="^3.1.2", optional=true}
+jsonpickle = "^3.0.2"
+pydantic = "^2.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
 
-# [tool.poetry.extras]
-# templating = ["jinja2"]
+[tool.poetry.extras]
+templating = ["jinja2"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

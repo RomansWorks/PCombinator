@@ -1,5 +1,5 @@
 import random
-from typing import List, Union
+from typing import List, Literal, Union
 
 from pcombinator.combinators.combinator import Combinator, IdTree, render_children
 
@@ -10,45 +10,46 @@ class RandomJoinCombinator(Combinator):
     and join them with the separator.
     """
 
+    _combinator_type: Literal["random_join"] = "random_join"
 
-    children: List[Union["Combinator", str]]
+    children: List[Union["Combinator", str, None]]
 
     def __init__(
         self,
         n_min: int = 1,
         n_max: int = 1,
-        separator: str = "\n",
-        seed: Union[int, None] = None,  # TODO: Determine if seed is better placed at render()
-        children: List[Union["Combinator", str]] = [],
+        separators: List[str] = ["\n"],
+        seed: Union[int, None] = None,
+        children: List[Union["Combinator", str, None]] = [],
         id: str = None,
     ):
         super().__init__(id=id)
-        self._combinator_type = "random_join"
         self.n_min = n_min
         self.n_max = n_max
-        self.separator = separator
-        self.seed = seed
+        self.separators = separators
+        self.random = random.Random(x=seed)
         self.children = children
 
-    def render(self) -> (str, IdTree):
+    def render(self) -> (Union[str, None], IdTree):
         # Choose how many children will be selected
-        n_children = random.randint(self.n_min, self.n_max)
+        n_children = self.random.randint(self.n_min, self.n_max)
 
         # Select children (without replacement)
-        selected_children = random.sample(self.children, n_children)
+        selected_children = self.random.sample(self.children, n_children)
 
         # Render children
-        rendered_children, rendered_child_id_tree = render_children(
-            selected_children
-        )
+        rendered_children, rendered_child_id_tree = render_children(selected_children)
+
+        # Select separator
+        separator = self.random.choice(self.separators)
 
         # Join children
-        rendered = self.separator.join(rendered_children)
+        rendered = separator.join(rendered_children)
 
         # Return
         return rendered, {self.id: rendered_child_id_tree}
 
-    def add_child(self, child: Union[Combinator, str]) -> None:
+    def add_child(self, child: Union[Combinator, str, None]) -> None:
         self.children.append(child)
 
     def get_children(self) -> List[Union[Combinator, str]]:
@@ -59,3 +60,21 @@ class RandomJoinCombinator(Combinator):
             if child.get_id() == id:
                 del self.children[i]
                 return
+
+    # def to_json(self):
+    #     return {
+    #         "combinator_type": self._combinator_type,
+    #         "id": self.id,
+    #         "n_min": self.n_min,
+    #         "n_max": self.n_max,
+    #         "separators": self.separators,
+    #         "children": [self._child_to_json(child) for child in self.children],
+    #     }
+
+    # def _child_to_json(self, child: Union[Combinator, str, None]):
+    #     if isinstance(child, str):
+    #         return child
+    #     elif child is None:
+    #         return None
+    #     else:
+    #         return child.to_json()

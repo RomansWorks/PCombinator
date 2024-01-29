@@ -1,17 +1,16 @@
 import unittest
 
-import jinja2
 from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
-from pcombinator.combinators.template_combinator import TemplateCombinator
+from pcombinator.combinators.template_combinator import Jinja2TemplateCombinator
 
 
 class TemplateCombinatorTests(unittest.TestCase):
     def test_render(self):
         # Create a TemplateCombinator instance
-        template = jinja2.Template("{{role}}\n{{task}}\n{{question}}\n")
+        template_source = "{{role}}\n{{task}}\n{{question}}\n"
 
-        template_combinator = TemplateCombinator(
-            template=template,
+        template_combinator = Jinja2TemplateCombinator(
+            template_source=template_source,
             children={
                 "role": "value_1",
                 "task": "value_2",
@@ -19,7 +18,7 @@ class TemplateCombinatorTests(unittest.TestCase):
                     n_max=1,
                     n_min=1,
                     children=["option_1"],
-                    separator="\n",
+                    separators=["\n"],
                     id="question_randomizer_1",
                 ),
             },

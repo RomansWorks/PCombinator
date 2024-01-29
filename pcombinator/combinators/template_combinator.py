@@ -1,19 +1,26 @@
-from typing import Dict
+from typing import Dict, Literal, Union
 from jinja2 import Template
 
 from pcombinator.combinators.combinator import Combinator, IdTree, render_children
 
 
-class TemplateCombinator(Combinator):
+class Jinja2TemplateCombinator(Combinator):
     """
     A combinator that renders a template with its rendered children as arguments.
     """
 
+    _combinator_type: Literal["jinja2_template"] = "jinja2_template"
+
+    template: Template
+    template_source: str
     children: Dict[str, "Combinator"]
 
-    def __init__(self, template: Template, children: Dict[str, "Combinator"], id=None):
+    def __init__(
+        self, template_source: str, children: Dict[str, "Combinator"], id=None
+    ):
         super().__init__(id)
-        self.template = template
+        self.template = Template(source=template_source)
+        self.template_source = template_source
         self.children = children
 
     def render(self) -> (str, IdTree):
@@ -48,3 +55,21 @@ class TemplateCombinator(Combinator):
             if child.get_id() == id:
                 del self.children[key]
                 return
+
+    # def to_json(self):
+    #     return {
+    #         "combinator_type": self._combinator_type,
+    #         "id": self.id,
+    #         "template_source": self.template_source,
+    #         "children": {
+    #             key: self._child_to_json(child) for key, child in self.children.items()
+    #         },
+    #     }
+
+    # def _child_to_json(self, child: Union[Combinator, str, None]):
+    #     if isinstance(child, str):
+    #         return child
+    #     elif child is None:
+    #         return None
+    #     else:
+    #         return child.to_json()

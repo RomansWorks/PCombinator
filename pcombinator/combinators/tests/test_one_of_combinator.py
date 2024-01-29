@@ -11,7 +11,6 @@ class OneOfCombinatorTests(unittest.TestCase):
         self.assertEqual(one_of_combinator._combinator_type, "one_of")
         self.assertEqual(one_of_combinator.n_min, 1)
         self.assertEqual(one_of_combinator.n_max, 1)
-        self.assertEqual(one_of_combinator.seed, 123)
         self.assertEqual(one_of_combinator.children, ["abc", "def"])
         self.assertEqual(one_of_combinator.id, "test_id")
 
@@ -20,11 +19,8 @@ class OneOfCombinatorTests(unittest.TestCase):
         self.assertEqual(one_of_combinator._combinator_type, "one_of")
         self.assertEqual(one_of_combinator.n_min, 1)
         self.assertEqual(one_of_combinator.n_max, 1)
-        self.assertIsNone(one_of_combinator.seed)
         self.assertEqual(one_of_combinator.children, [])
         self.assertIsNone(one_of_combinator.id)
-
-    # Add more test cases as needed
 
 
 if __name__ == "__main__":

@@ -1,16 +1,16 @@
-from typing import Dict, List, NewType
-
+from typing import Dict, List, NewType, Union
+from pydantic import BaseModel
 
 IdTree = NewType("IdTree", Dict[str, "IdTree"])
 
 
-class Combinator:
+class Combinator(BaseModel):
     """
     Base class for combinators.
     """
-    
+
     _combinator_type: str
-    
+
     id: str
 
     def __init__(self, id=None):
@@ -22,7 +22,7 @@ class Combinator:
         """
         return self.id
 
-    def render(self) -> (str, IdTree):
+    def render(self) -> (Union[str, None], IdTree):
         """
         Render self. To be implemented by subclasses.
 
@@ -31,7 +31,9 @@ class Combinator:
         raise NotImplementedError("render() not implemented")
 
 
-def render_children(children: List["Combinator"]) -> (List[str], IdTree):
+def render_children(
+    children: List[Union["Combinator", str, None]]
+) -> (List[Union[str, None]], IdTree):
     """
     Recursively render children.
     For each rendered child, include the rendered child's id tree in the returned IdTree.
@@ -47,10 +49,11 @@ def render_children(children: List["Combinator"]) -> (List[str], IdTree):
             rendered_children.append(child)
             # rendered_child_id_tree[child.__hash__()] = {}
             continue
+        elif child is None:
+            continue
         rendered_child, rendered_child_id_tree = child.render()
         rendered_children.append(rendered_child)
         rendered_children_id_tree.update(rendered_child_id_tree)
         # rendered_children_id_tree[child.get_id()] = rendered_child_id_tree
 
     return rendered_children, rendered_children_id_tree
-
