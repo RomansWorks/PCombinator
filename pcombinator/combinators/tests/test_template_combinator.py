@@ -10,19 +10,19 @@ class TemplateCombinatorTests(unittest.TestCase):
         template_source = "{{role}}\n{{task}}\n{{question}}\n"
 
         template_combinator = Jinja2TemplateCombinator(
+            id="template_1",
             template_source=template_source,
             children={
                 "role": "value_1",
                 "task": "value_2",
                 "question": RandomJoinCombinator(
+                    id="question_randomizer_1",
                     n_max=1,
                     n_min=1,
                     children=["option_1"],
                     separators=["\n"],
-                    id="question_randomizer_1",
                 ),
             },
-            id="template_1",
         )
 
         # Render

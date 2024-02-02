@@ -1,4 +1,6 @@
-from typing import Literal
+from typing import Literal, Union
+
+from pydantic import Field
 from pcombinator.combinators.combinator import Combinator, IdTree
 
 
@@ -11,9 +13,9 @@ class FixedStringCombinator(Combinator):
 
     _combinator_type: Literal["fixed_string"] = "fixed_string"
 
-    string: str
+    string: str = Field(...)
 
-    def __init__(self, string: str, id: str = None):
+    def __init__(self, id: str, string: str):
         """
         Initialize a new FixedStringCombinator.
 
@@ -21,6 +23,7 @@ class FixedStringCombinator(Combinator):
             string: The string to render.
             id: The id of the combinator.
         """
+        self.string = string
 
         super().__init__(id=id)
 
@@ -28,7 +31,7 @@ class FixedStringCombinator(Combinator):
         """
         Render self, specifically returns the string and an empty IdTree since strings don't have an additional identifier.
         """
-        return self.string, {self.id: {}}
+        return self.string, {self._id: {}}
 
     # def to_json(self):
     #     """

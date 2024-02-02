@@ -12,11 +12,13 @@ class OneOfCombinator(RandomJoinCombinator):
 
     def __init__(
         self,
-        seed: Union[int, None] = None,
+        id: str,
         children: List[Union[Combinator, str, None]] = [],
-        id: str = None,
+        seed: Union[int, None] = None,
     ):
-        super().__init__(1, 1, "", seed, children, id)
+        super().__init__(
+            id=id, n_min=1, n_max=1, separators=[""], children=children, seed=seed
+        )
 
     # def to_json(self):
     #     parent = super().to_json()

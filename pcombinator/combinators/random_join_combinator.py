@@ -16,12 +16,12 @@ class RandomJoinCombinator(Combinator):
 
     def __init__(
         self,
+        id: str,
         n_min: int = 1,
         n_max: int = 1,
         separators: List[str] = ["\n"],
-        seed: Union[int, None] = None,
         children: List[Union["Combinator", str, None]] = [],
-        id: str = None,
+        seed: Union[int, None] = None,
     ):
         super().__init__(id=id)
         self.n_min = n_min
@@ -47,7 +47,7 @@ class RandomJoinCombinator(Combinator):
         rendered = separator.join(rendered_children)
 
         # Return
-        return rendered, {self.id: rendered_child_id_tree}
+        return rendered, {self._id: rendered_child_id_tree}
 
     def add_child(self, child: Union[Combinator, str, None]) -> None:
         self.children.append(child)

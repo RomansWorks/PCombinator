@@ -10,17 +10,17 @@ class Combinator(BaseModel):
     """
 
     _combinator_type: str
+    _id: str
 
-    id: str
-
-    def __init__(self, id=None):
-        self.id = id
+    def __init__(self, id):
+        super().__init__()
+        self._id = id
 
     def get_id(self):
         """
         Get the id of the combinator.
         """
-        return self.id
+        return self._id
 
     def render(self) -> (Union[str, None], IdTree):
         """

@@ -1,5 +1,6 @@
 from typing import Dict, Literal, Union
 from jinja2 import Template
+from pydantic import PrivateAttr
 
 from pcombinator.combinators.combinator import Combinator, IdTree, render_children
 
@@ -11,15 +12,18 @@ class Jinja2TemplateCombinator(Combinator):
 
     _combinator_type: Literal["jinja2_template"] = "jinja2_template"
 
-    template: Template
+    _template: Template = PrivateAttr()
     template_source: str
     children: Dict[str, "Combinator"]
 
     def __init__(
-        self, template_source: str, children: Dict[str, "Combinator"], id=None
+        self,
+        id: str,
+        template_source: str,
+        children: Dict[str, "Combinator"],
     ):
         super().__init__(id)
-        self.template = Template(source=template_source)
+        self._template = Template(source=template_source)
         self.template_source = template_source
         self.children = children
 
@@ -32,13 +36,13 @@ class Jinja2TemplateCombinator(Combinator):
             rendered_id_tree: An IdTree of rendered children under this combinator id.
         """
         rendered_children_dict = {}
-        res_id_tree = {self.id: {}}
+        res_id_tree = {self._id: {}}
         for key in self.children.keys():
             rendered, id_tree = render_children([self.children[key]])
-            res_id_tree[self.id][key] = id_tree
+            res_id_tree[self._id][key] = id_tree
             rendered_children_dict[key] = rendered[0]
 
-        res = self.template.render(rendered_children_dict)
+        res = self._template.render(rendered_children_dict)
         return res, res_id_tree
 
     def add_child(self, key: str, child: "Combinator") -> None:
