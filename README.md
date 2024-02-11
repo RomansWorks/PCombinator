@@ -7,6 +7,80 @@
 
 # PCombinator
 
+A handy tool for generating variations of prompts for large language and vision models, and evaluating the effectiveness of each particle in the variation. With it you can systematically optimize your prompts. 
+
+Some examples of questions you can easily test using PCombinator:
+- Is giving a an example (few shot) to the prompt contributes to effectiveness? 
+- Is a specific example or combination of examples better than the others?
+- Is this additional instruction helpful?
+- Is putting the examples before the rules or instructions better, or is it vice versa?
+- Which delimiter is the best for separating examples? (see )
+- Does Chain of Though (CoT) help or just cost more?
+- Does the order of the examples matter?
+- Do I need this many examples?
+- Should I use an instructive language or a more conversational one?
+- Is a certain role for the model biases it better than another role?
+- Which terms in a text2image prompt contribute more to the effectiveness of the prompt?
+
+There are two parts to the library, each can be used independently:
+1. The Combinators (arranged in a tree): which generate the prompts.
+2. The Evaluator: which evaluates the effectiveness of the prompts.
+
+Some metrics that can be used to evaluate the effectiveness of the prompts:
+- The score given by a human or a model judge to the output. 
+- Use existing labeled datasets and evaluators 
+- The perplexity of the model on the prompt. 
+
+## How to use it?
+
+### Generating candidates
+```python
+from pcombinator import TemplateCombinator, OneOfCombinator, RandomJoinCombinator, FixedStringCombinator
+
+# Create the combinators
+template = TemplateCombinator(
+    "This is a template with {child1} and {child2}.",
+    children={
+        "child1": OneOfCombinator(
+            children=[
+                FixedStringCombinator("child1a"),
+                FixedStringCombinator("child1b"),
+            ]
+        ),
+        "child2": RandomJoinCombinator(
+            children=[
+                FixedStringCombinator("child2a"),
+                FixedStringCombinator("child2b"),
+            ],
+            separator=" or ",
+        ),
+    },
+)
+
+# Render the combinators
+prompt, id_tree = template.render()
+
+print(prompt)
+print(id_tree)
+
+# Save the prompt and id_tree for later evaluation
+***
+```
+
+### Evaluating candidates (not yet implemented)
+```python
+
+from pcombinator import load_candidates
+
+# Load the candidates
+candidates = load_candidates("path/to/candidates")
+
+# Evaluate the candidates
+scores = evaluate_candidates(candidates)
+
+print(scores)
+```
+
 ## What is it?
 
 PCombinator creates combinations of prompts from a tree of other combinators, and eventually string or None values at the leafes. It also stores the identifiers used to create the specific combination, for later evaluation of the effectiveness of each node in the tree. The evaluation functionality is not yet implemented.
@@ -37,7 +111,7 @@ IdTree is returned by the `render()` method of combinators. It is built as follo
 3. Combinators also accept strings as children, in which case for now we don't store any identifier in the IdTree. If you do want to store an identifier, use the `FixedStringCombinator` instead of the string. 
 
 # TODO: 
-1. Implement best practices templates
+1. Implement best practices templates   
 2. Duplication elimination at the top level, max attempts
 3. Add methods documentation
 4. Add general documentation
@@ -47,7 +121,6 @@ IdTree is returned by the `render()` method of combinators. It is built as follo
 8. Decide if strings need an identifier in the IdTree for compatibility with the PromptBase library and PromptEvaluator. 
 9. Normalize convention around internal fields.
 10. Add support for encoding atoms such that they don't interfere with any separators.
-11. Add support for random separators at least in random_join_combinator.
 
 
 # Developing
