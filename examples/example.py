@@ -21,17 +21,17 @@ def main():
     task_combinator = OneOfCombinator(
         id="task",
         children=[
-            "Your task is to explain concepts provided by the user on three levels - ELI5, intuitive and rigorous",
-            "Your task is to explain concepts provided by the user on three levels - beginner, intermediate, expert",
-            "Your task is to explain concepts provided by the user on three levels",
+            "Your task is to explain concepts provided by the user on three levels - ELI5, intuitive and rigorous.",
+            "Your task is to explain concepts provided by the user on three levels - beginner, intermediate, expert.",
+            "Your task is to explain concepts provided by the user on three levels.",
         ],
     )
 
     tone_combinator = OneOfCombinator(
         id="tone",
         children=[
-            "Use a friendly and supporive tone",
-            "Use clean and professional tone",
+            "Use a friendly and supporive tone.",
+            "Use clean and professional tone.",
             None,
         ],
     )
@@ -47,7 +47,7 @@ def main():
             Step 1: Briefly rephrase the user question or request.
             Step 2: Answer the question or request.
             """,
-            "Think step by step",
+            "Think step by step.",
             None,
         ],
     )
@@ -68,7 +68,12 @@ def main():
         },
     )
 
-    print(root_combinator.render())
+    n_samples = 5
+    for idx in range(n_samples):
+        rendered, id_tree = root_combinator.render()
+        print(f"Candidate {idx}:", rendered)
+        print("Id tree:", id_tree)
+        print()
 
 
 # Main
