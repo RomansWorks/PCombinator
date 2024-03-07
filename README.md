@@ -83,7 +83,7 @@ print(scores)
 
 ## What is it?
 
-PCombinator creates combinations of prompts from a tree of other combinators, and eventually string or None values at the leafes. It also stores the identifiers used to create the specific combination, for later evaluation of the effectiveness of each node in the tree. The evaluation functionality is not yet implemented.
+PCombinator creates combinations of prompts from a tree of other combinators, and eventually string or None values at the leaves. It also stores the identifiers used to create the specific combination, for later evaluation of the effectiveness of each node in the tree. The evaluation functionality is not yet implemented.
 
 There are several types of combinators:
 1. TemplateCombinator: takes a template and a list of children, and fills the template with the children. The template is a string with slots to be filled by the children. The slots are identified by their name, which is the key in the dictionary of children. The template can also contain fixed strings, which are not filled by the children.
@@ -92,13 +92,10 @@ There are several types of combinators:
 4. FixedStringCombinator: can be used in place of using a string leaf, to allow for storing an identifier in the IdTree.
 
 
-1. Combines candidate prompts for LLMs from Ingredients and Alternatives, mixed within a Template according to probabilities.
+1. Combines candidate prompts for LLMs and multimodal models, mixed from a tree of Combinators.
 2. Stores created prompts in a standardised format which is designed for use in later evaluation.
-3. Load and get candidate prompts for evaluation.
-4. (TODO): Evaluator given scores per prompt which helps detect the ingredients and alternatives which are most effective.
-
-# Ingredients
-Ingredients have a type to make it easier to evaluate which type of ingredient contributes most to the effectiveness of a prompt. The currently know best-practice types are to be recorded in best_practices.py. 
+3. Save and Load combinator trees and rendered prompts for evaluation.
+4. (TODO): Evaluator given scores per prompt which helps detect the contribution of each leaf value.
 
 
 # IdTree
