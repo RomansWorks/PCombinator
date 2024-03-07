@@ -1,7 +1,8 @@
-import random
+import random as rnd
 from typing import Any, List, Literal, Union
 
 from pcombinator.combinators.combinator import Combinator, IdTree, render_children
+from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
 
 
 class RandomJoinCombinator(Combinator):
@@ -12,7 +13,7 @@ class RandomJoinCombinator(Combinator):
 
     _combinator_type: Literal["random_join"] = "random_join"
 
-    children: List[Union["Combinator", str, None]]
+    children: List[CombinatorOrLeaf]
     n_min: int
     n_max: int
     separators: List[str]
@@ -25,7 +26,7 @@ class RandomJoinCombinator(Combinator):
         n_min: int = 1,
         n_max: int = 1,
         separators: List[str] = ["\n"],
-        children: List[Union["Combinator", str, None]] = [],
+        children: List[CombinatorOrLeaf] = [],
         seed: Union[int, None] = None,
         random: Union[Any, None] = None,
     ):
@@ -41,7 +42,7 @@ class RandomJoinCombinator(Combinator):
         self.n_min = n_min
         self.n_max = n_max
         self.separators = separators
-        self.random = random or random.Random(x=seed)
+        self.random = random or rnd.Random(x=seed)
         self.seed = seed
         self.children = children
 
@@ -64,10 +65,10 @@ class RandomJoinCombinator(Combinator):
         # Return
         return rendered, {self._id: rendered_child_id_tree}
 
-    def add_child(self, child: Union[Combinator, str, None]) -> None:
+    def add_child(self, child: CombinatorOrLeaf) -> None:
         self.children.append(child)
 
-    def get_children(self) -> List[Union[Combinator, str]]:
+    def get_children(self) -> List[CombinatorOrLeaf]:
         return self.children
 
     def remove_child_by_id(self, id: str) -> None:
@@ -86,7 +87,7 @@ class RandomJoinCombinator(Combinator):
     #         "children": [self._child_to_json(child) for child in self.children],
     #     }
 
-    # def _child_to_json(self, child: Union[Combinator, str, None]):
+    # def _child_to_json(self, child: CombinatorOrLeaf):
     #     if isinstance(child, str):
     #         return child
     #     elif child is None:

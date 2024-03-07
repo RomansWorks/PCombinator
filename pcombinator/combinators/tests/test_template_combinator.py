@@ -1,4 +1,5 @@
 import unittest
+from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
 
 from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
 from pcombinator.combinators.template_combinator import Jinja2TemplateCombinator
@@ -13,8 +14,8 @@ class TemplateCombinatorTests(unittest.TestCase):
             id="template_1",
             template_source=template_source,
             children={
-                "role": "value_1",
-                "task": "value_2",
+                "role": "value_1_of_role",
+                "task": "value_1_of_task",
                 "question": RandomJoinCombinator(
                     id="question_randomizer_1",
                     n_max=1,
@@ -31,7 +32,7 @@ class TemplateCombinatorTests(unittest.TestCase):
         # Check the result
         self.assertEqual(
             result,
-            "value_1\nvalue_2\noption_1",
+            "value_1_of_role\nvalue_1_of_task\noption_1",
         )
 
         # Check the id_tree

@@ -3,6 +3,7 @@ from jinja2 import Template
 from pydantic import PrivateAttr
 
 from pcombinator.combinators.combinator import Combinator, IdTree, render_children
+from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
 
 
 class Jinja2TemplateCombinator(Combinator):
@@ -14,13 +15,13 @@ class Jinja2TemplateCombinator(Combinator):
 
     _template: Template = PrivateAttr()
     template_source: str
-    children: Dict[str, "Combinator"]
+    children: Dict[str, CombinatorOrLeaf]
 
     def __init__(
         self,
         id: str,
         template_source: str,
-        children: Dict[str, "Combinator"],
+        children: Dict[str, CombinatorOrLeaf],
     ):
         super().__init__(id=id, template_source=template_source, children=children)
         self._template = Template(source=template_source)
@@ -45,10 +46,10 @@ class Jinja2TemplateCombinator(Combinator):
         res = self._template.render(rendered_children_dict)
         return res, res_id_tree
 
-    def add_child(self, key: str, child: "Combinator") -> None:
+    def add_child(self, key: str, child: CombinatorOrLeaf) -> None:
         self.children[key] = child
 
-    def get_children(self) -> Dict[str, "Combinator"]:
+    def get_children(self) -> Dict[str, CombinatorOrLeaf]:
         return self.children
 
     def remove_child_by_key(self, key: str) -> None:
@@ -70,7 +71,7 @@ class Jinja2TemplateCombinator(Combinator):
     #         },
     #     }
 
-    # def _child_to_json(self, child: Union[Combinator, str, None]):
+    # def _child_to_json(self, child: CombinatorOrLeaf):
     #     if isinstance(child, str):
     #         return child
     #     elif child is None:

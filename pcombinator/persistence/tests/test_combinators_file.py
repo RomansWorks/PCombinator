@@ -2,6 +2,7 @@ import json
 import tempfile
 import unittest
 import jinja2
+from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
 from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
 
 from pcombinator.combinators.template_combinator import Jinja2TemplateCombinator
@@ -18,8 +19,8 @@ class TestCombinatorsFile(unittest.TestCase):
         template_combinator = Jinja2TemplateCombinator(
             template_source=template_source,
             children={
-                "role": "value_1",
-                "task": "value_2",
+                "role": FixedStringCombinator("id1", "value_1"),
+                "task": FixedStringCombinator("id2", "value_2"),
                 "question": RandomJoinCombinator(
                     n_max=1,
                     n_min=1,

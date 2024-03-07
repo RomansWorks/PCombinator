@@ -1,6 +1,7 @@
 import random
 from typing import List, Literal, Union
 from pcombinator.combinators.combinator import Combinator
+from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
 from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
 
 
@@ -14,7 +15,7 @@ class OneOfCombinator(RandomJoinCombinator):
     def __init__(
         self,
         id: str,
-        children: List[Union[Combinator, str, None]] = [],
+        children: List[CombinatorOrLeaf] = [],
         seed: Union[int, None] = None,
     ):
         super().__init__(
