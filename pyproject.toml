@@ -14,7 +14,7 @@ jsonpickle = "^3.0.2"
 pydantic = "^2.5.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2"
+pytest = "^8.0.2"
 
 [tool.poetry.extras]
 templating = ["jinja2"]
