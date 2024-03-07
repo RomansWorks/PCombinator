@@ -1,3 +1,4 @@
+import random
 from typing import List, Literal, Union
 from pcombinator.combinators.combinator import Combinator
 from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
@@ -17,7 +18,13 @@ class OneOfCombinator(RandomJoinCombinator):
         seed: Union[int, None] = None,
     ):
         super().__init__(
-            id=id, n_min=1, n_max=1, separators=[""], children=children, seed=seed
+            id=id,
+            n_min=1,
+            n_max=1,
+            separators=[""],
+            children=children,
+            seed=seed,
+            random=random.Random(x=seed),
         )
 
     # def to_json(self):

@@ -12,8 +12,8 @@ class Combinator(BaseModel):
     _combinator_type: str
     _id: str
 
-    def __init__(self, id):
-        super().__init__()
+    def __init__(self, id, **kwargs):
+        super().__init__(id=id, **kwargs)
         self._id = id
 
     def get_id(self):
@@ -22,7 +22,7 @@ class Combinator(BaseModel):
         """
         return self._id
 
-    def render(self) -> (Union[str, None], IdTree):
+    def render(self) -> tuple[Union[str, None], IdTree]:
         """
         Render self. To be implemented by subclasses.
 
@@ -33,7 +33,7 @@ class Combinator(BaseModel):
 
 def render_children(
     children: List[Union["Combinator", str, None]]
-) -> (List[Union[str, None]], IdTree):
+) -> tuple[List[Union[str, None]], IdTree]:
     """
     Recursively render children.
     For each rendered child, include the rendered child's id tree in the returned IdTree.

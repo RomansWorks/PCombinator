@@ -1,5 +1,5 @@
 import random
-from typing import List, Literal, Union
+from typing import Any, List, Literal, Union
 
 from pcombinator.combinators.combinator import Combinator, IdTree, render_children
 
@@ -13,6 +13,11 @@ class RandomJoinCombinator(Combinator):
     _combinator_type: Literal["random_join"] = "random_join"
 
     children: List[Union["Combinator", str, None]]
+    n_min: int
+    n_max: int
+    separators: List[str]
+    random: Any
+    seed: Union[int, None]
 
     def __init__(
         self,
@@ -22,15 +27,25 @@ class RandomJoinCombinator(Combinator):
         separators: List[str] = ["\n"],
         children: List[Union["Combinator", str, None]] = [],
         seed: Union[int, None] = None,
+        random: Union[Any, None] = None,
     ):
-        super().__init__(id=id)
+        super().__init__(
+            id=id,
+            n_min=n_min,
+            n_max=n_max,
+            separators=separators,
+            children=children,
+            seed=seed,
+            random=random,
+        )
         self.n_min = n_min
         self.n_max = n_max
         self.separators = separators
-        self.random = random.Random(x=seed)
+        self.random = random or random.Random(x=seed)
+        self.seed = seed
         self.children = children
 
-    def render(self) -> (Union[str, None], IdTree):
+    def render(self) -> tuple[Union[str, None], IdTree]:
         # Choose how many children will be selected
         n_children = self.random.randint(self.n_min, self.n_max)
 

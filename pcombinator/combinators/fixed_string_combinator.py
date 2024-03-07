@@ -23,11 +23,11 @@ class FixedStringCombinator(Combinator):
             string: The string to render.
             id: The id of the combinator.
         """
+        super().__init__(id=id, string=string)
+
         self.string = string
 
-        super().__init__(id=id)
-
-    def render(self) -> (str, IdTree):
+    def render(self) -> tuple[str, IdTree]:
         """
         Render self, specifically returns the string and an empty IdTree since strings don't have an additional identifier.
         """

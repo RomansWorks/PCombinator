@@ -22,12 +22,12 @@ class Jinja2TemplateCombinator(Combinator):
         template_source: str,
         children: Dict[str, "Combinator"],
     ):
-        super().__init__(id)
+        super().__init__(id=id, template_source=template_source, children=children)
         self._template = Template(source=template_source)
         self.template_source = template_source
         self.children = children
 
-    def render(self) -> (str, IdTree):
+    def render(self) -> tuple[str, IdTree]:
         """
         Render the template, passing the rendered children as arguments.
 
