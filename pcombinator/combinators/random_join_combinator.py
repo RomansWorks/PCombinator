@@ -1,7 +1,12 @@
 import random as rnd
 from typing import Any, List, Literal, Union
 
-from pcombinator.combinators.combinator import Combinator, IdTree, render_children
+from pcombinator.combinators.combinator import (
+    Combinator,
+    IdTree,
+    render_children,
+    derived_classes,
+)
 from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
 
 
@@ -11,7 +16,7 @@ class RandomJoinCombinator(Combinator):
     and join them with the separator.
     """
 
-    _combinator_type: Literal["random_join"] = "random_join"
+    # _combinator_type: Literal["random_join"] = "random_join"
 
     children: List[CombinatorOrLeaf]
     n_min: int
@@ -38,7 +43,9 @@ class RandomJoinCombinator(Combinator):
             children=children,
             seed=seed,
             random=random,
+            # combinator_type=__class__.__module__ + "." + __class__.__qualname__,
         )
+        # self._combinator_type = __class__.__name__
         self.n_min = n_min
         self.n_max = n_max
         self.separators = separators
@@ -63,7 +70,7 @@ class RandomJoinCombinator(Combinator):
         rendered = separator.join(rendered_children)
 
         # Return
-        return rendered, {self._id: rendered_child_id_tree}
+        return rendered, {self.id: rendered_child_id_tree}
 
     def add_child(self, child: CombinatorOrLeaf) -> None:
         self.children.append(child)
@@ -94,3 +101,7 @@ class RandomJoinCombinator(Combinator):
     #         return None
     #     else:
     #         return child.to_json()
+
+
+# derived_classes["random_join"] = RandomJoinCombinator
+# derived_classes[RandomJoinCombinator.__name__] = RandomJoinCombinator

@@ -19,8 +19,8 @@ class TestCombinatorsFile(unittest.TestCase):
         template_combinator = Jinja2TemplateCombinator(
             template_source=template_source,
             children={
-                "role": FixedStringCombinator("id1", "value_1"),
-                "task": FixedStringCombinator("id2", "value_2"),
+                "role": FixedStringCombinator("role_id", "value_1"),
+                "task": "task_value",
                 "question": RandomJoinCombinator(
                     n_max=1,
                     n_min=1,

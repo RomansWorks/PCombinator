@@ -1,8 +1,13 @@
-from typing import Dict, Literal, Union
+from typing import Dict
 from jinja2 import Template
 from pydantic import PrivateAttr
 
-from pcombinator.combinators.combinator import Combinator, IdTree, render_children
+from pcombinator.combinators.combinator import (
+    Combinator,
+    IdTree,
+    render_children,
+    derived_classes,
+)
 from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
 
 
@@ -11,7 +16,7 @@ class Jinja2TemplateCombinator(Combinator):
     A combinator that renders a template with its rendered children as arguments.
     """
 
-    _combinator_type: Literal["jinja2_template"] = "jinja2_template"
+    # _combinator_type: Literal["jinja2_template"] = "jinja2_template"
 
     _template: Template = PrivateAttr()
     template_source: str
@@ -23,7 +28,13 @@ class Jinja2TemplateCombinator(Combinator):
         template_source: str,
         children: Dict[str, CombinatorOrLeaf],
     ):
-        super().__init__(id=id, template_source=template_source, children=children)
+        super().__init__(
+            id=id,
+            template_source=template_source,
+            children=children,
+            # _combinator_type=self._combinator_type,
+            # combinator_type=__class__.__name__,
+        )
         self._template = Template(source=template_source)
         self.template_source = template_source
         self.children = children
@@ -37,10 +48,10 @@ class Jinja2TemplateCombinator(Combinator):
             rendered_id_tree: An IdTree of rendered children under this combinator id.
         """
         rendered_children_dict = {}
-        res_id_tree = {self._id: {}}
+        res_id_tree = {self.id: {}}
         for key in self.children.keys():
             rendered, id_tree = render_children([self.children[key]])
-            res_id_tree[self._id][key] = id_tree
+            res_id_tree[self.id][key] = id_tree
             rendered_children_dict[key] = rendered[0]
 
         res = self._template.render(rendered_children_dict)
@@ -78,3 +89,7 @@ class Jinja2TemplateCombinator(Combinator):
     #         return None
     #     else:
     #         return child.to_json()
+
+
+# derived_classes["jinja2_template"] = Jinja2TemplateCombinator
+# derived_classes[Jinja2TemplateCombinator.__name__] = Jinja2TemplateCombinator

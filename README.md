@@ -1,7 +1,7 @@
-![Build Status](https://img.shields.io/github/actions/workflow/status/RomansWorks/pcombinator/build-library)
-![Coverage Status](https://img.shields.io/codecov/c/github/RomansWorks/pcombinator)
-![GitHub](https://img.shields.io/github/license/RomansWorks/pcombinator)
-![PyPI version](https://img.shields.io/pypi/v/pcombinator)
+![Build Status](https://img.shields.io/github/actions/workflow/status/RomansWorks/PCombinator/build-library)
+![Coverage Status](https://img.shields.io/codecov/c/github/RomansWorks/PCombinator)
+![GitHub](https://img.shields.io/github/license/RomansWorks/PCombinator)
+![PyPI version](https://img.shields.io/pypi/v/PCombinator)
 ![Python version](https://img.shields.io/badge/python-3.10-blue.svg)
 
 
