@@ -1,7 +1,6 @@
-from typing import Literal, Union
-
-from pydantic import Field
-from pcombinator.combinators.combinator import Combinator, IdTree
+import json
+from pcombinator.combinators.combinator import Combinator, IdTree, derived_classes
+from pcombinator.util.classname import get_fully_qualified_class_name
 
 
 class FixedStringCombinator(Combinator):
@@ -11,19 +10,29 @@ class FixedStringCombinator(Combinator):
     NOTE: This is only necessary when you want to preserve the id of the string in the IdTree. Otherwise you can just use a string as a child of a higher combinator.
     """
 
-    _combinator_type: Literal["fixed_string"] = "fixed_string"
+    string: str
 
-    string: str = Field(...)
-
-    def __init__(self, id: str, string: str):
+    def __init__(
+        self,
+        id: str,
+        string: str,
+        **kwargs,
+    ):
         """
         Initialize a new FixedStringCombinator.
 
         Args:
-            string: The string to render.
             id: The id of the combinator.
+            string: The string to render.
         """
-        super().__init__(id=id, string=string)
+        super().__init__(
+            id=id,
+            combinator_type=kwargs.get("combinator_type")
+            or get_fully_qualified_class_name(self.__class__),
+        )
+
+        if not isinstance(string, str) or string is None:
+            raise ValueError(f"string must be a string, not {type(string)}")
 
         self.string = string
 
@@ -31,14 +40,20 @@ class FixedStringCombinator(Combinator):
         """
         Render self, specifically returns the string and an empty IdTree since strings don't have an additional identifier.
         """
-        return self.string, {self._id: {}}
+        return self.string, {self.id: {}}
 
-    # def to_json(self):
-    #     """
-    #     Convert self to a json-compatible dictionary.
-    #     """
-    #     return {
-    #         "combinator_type": self._combinator_type,
-    #         "id": self.id,
-    #         "string": self.string,
-    #     }
+    def render_all(self) -> tuple[str, IdTree]:
+        """
+        Render self, specifically returns the string and an empty IdTree since strings don't have an additional identifier.
+        """
+        return self.string, {self.id: {}}
+
+    @classmethod
+    def from_json(cls, values: dict):
+        return cls(
+            id=values["id"],
+            string=values["string"],
+        )
+
+
+Combinator.register_derived_class(FixedStringCombinator)

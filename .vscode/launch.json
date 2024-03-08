@@ -1,0 +1,34 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Test Combinator",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "pcombinator/combinators/tests/test_combinator.py",
+      "console": "integratedTerminal",
+      // "justMyCode": false
+    },
+    {
+      "name": "Debug Example.py",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "examples/example.py",
+      "console": "integratedTerminal",
+      // "justMyCode": false
+    },
+    // Debug all tests usint the pytest framework
+    {
+      "name": "Debug All Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": "${workspaceFolder}/",
+      "console": "integratedTerminal",
+      // "justMyCode": false
+    } 
+  ]
+}

@@ -1,7 +1,7 @@
-![Build Status](https://img.shields.io/github/actions/workflow/status/RomansWorks/pcombinator/build-library)
-![Coverage Status](https://img.shields.io/codecov/c/github/RomansWorks/pcombinator)
-![GitHub](https://img.shields.io/github/license/RomansWorks/pcombinator)
-![PyPI version](https://img.shields.io/pypi/v/pcombinator)
+![Build Status](https://img.shields.io/github/actions/workflow/status/RomansWorks/PCombinator/build-library)
+![Coverage Status](https://img.shields.io/codecov/c/github/RomansWorks/PCombinator)
+![GitHub](https://img.shields.io/github/license/RomansWorks/PCombinator)
+![PyPI version](https://img.shields.io/pypi/v/Pcombinator)
 ![Python version](https://img.shields.io/badge/python-3.10-blue.svg)
 
 
@@ -34,6 +34,7 @@ Some metrics that can be used to evaluate the effectiveness of the prompts:
 ## How to use it?
 
 ### Generating candidates
+
 ```python
 from pcombinator import TemplateCombinator, OneOfCombinator, RandomJoinCombinator, FixedStringCombinator
 
@@ -57,15 +58,33 @@ template = TemplateCombinator(
     },
 )
 
-# Render the combinators
-prompt, id_tree = template.render()
+# # Save the combinator tree for future use
+# json_str = template_combinator.to_json()
+# with open("path/to/combinator.json", "w") as f:
+#     f.write(json_str)
 
-print(prompt)
-print(id_tree)
+# # Loading the combinator tree looks as following:
+# with open("path/to/combinator.json", "r") as f:
+#     json_str = f.read()
+#     loaded_combinator = Combinator.from_json(json_str)
+
+
+# Render 10 different versions of the resulting prompt:
+for _ in range(10):
+    prompt, id_tree = template.render()
+    print("=" * 80)
+    print(prompt)
+    print("-" * 80)
+    print(id_tree)
+
 
 # Save the prompt and id_tree for later evaluation
+# TODO
+
 ***
 ```
+
+See additional exampels in the `examples` folder and under `pcombinator/combinators/tests`.
 
 ### Evaluating candidates (not yet implemented)
 ```python
@@ -114,10 +133,9 @@ IdTree is returned by the `render()` method of combinators. It is built as follo
 4. Add general documentation
 5. Add tests
 6. Add examples
-7. Add serialization for Combinators 
-8. Decide if strings need an identifier in the IdTree for compatibility with the PromptBase library and PromptEvaluator. 
-9. Normalize convention around internal fields.
-10. Add support for encoding atoms such that they don't interfere with any separators.
+7. Decide if strings need an identifier in the IdTree for compatibility with the PromptBase library and PromptEvaluator. 
+8. Normalize convention around internal fields.
+9. Add support for encoding atoms such that they don't interfere with any separators.
 
 
 # Developing

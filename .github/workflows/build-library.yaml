@@ -1,4 +1,4 @@
-name: Build
+name: build-library
 
 on:
   push:
@@ -26,6 +26,6 @@ jobs:
           poetry env use 3.10
       - name: Install dependencies
         run: |
-          poetry install --no-root --extras http --extras yaml
+          poetry install -E templating --no-root
       - name: Run unit tests
-        run: poetry run python -m unittest
+        run: poetry run python -m pytest
