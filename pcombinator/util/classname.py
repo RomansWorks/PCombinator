@@ -8,4 +8,4 @@ def get_fully_qualified_class_name(cls):
     Returns:
         The fully qualified class name.
     """
-    return cls.__module__ + "." + cls.__qualname__
+    return cls.__module__ + "." + cls.__class__.__qualname__

@@ -10,8 +10,7 @@ readme = "README.md"
 python = "^3.9"
 versioned_collection = "^0.0.1"
 jinja2 = {version="^3.1.2", optional=true}
-jsonpickle = "^3.0.2"
-pydantic = "^2.5.0"
+
 
 [tool.poetry.dev-dependencies]
 pytest = "^8.0.2"

@@ -1,5 +1,6 @@
-from pydantic import Field
+import json
 from pcombinator.combinators.combinator import Combinator, IdTree, derived_classes
+from pcombinator.util.classname import get_fully_qualified_class_name
 
 
 class FixedStringCombinator(Combinator):
@@ -9,11 +10,14 @@ class FixedStringCombinator(Combinator):
     NOTE: This is only necessary when you want to preserve the id of the string in the IdTree. Otherwise you can just use a string as a child of a higher combinator.
     """
 
-    # _combinator_type: Literal["fixed_string"] = "fixed_string"
-
     string: str
 
-    def __init__(self, id: str, string: str):
+    def __init__(
+        self,
+        id: str,
+        string: str,
+        **kwargs,
+    ):
         """
         Initialize a new FixedStringCombinator.
 
@@ -23,8 +27,8 @@ class FixedStringCombinator(Combinator):
         """
         super().__init__(
             id=id,
-            string=string,
-            # combinator_type=__class__.__name__,
+            combinator_type=kwargs.get("combinator_type")
+            or get_fully_qualified_class_name(self.__class__),
         )
 
         if not isinstance(string, str) or string is None:
@@ -44,16 +48,12 @@ class FixedStringCombinator(Combinator):
         """
         return self.string, {self.id: {}}
 
-    # def to_json(self):
-    #     """
-    #     Convert self to a json-compatible dictionary.
-    #     """
-    #     return {
-    #         "combinator_type": self._combinator_type,
-    #         "id": self.id,
-    #         "string": self.string,
-    #     }
+    @classmethod
+    def from_json(cls, values: dict):
+        return cls(
+            id=values["id"],
+            string=values["string"],
+        )
 
 
-# derived_classes["fixed_string"] = FixedStringCombinator
-# derived_classes[FixedStringCombinator.__name__] = FixedStringCombinator
+Combinator.register_derived_class(FixedStringCombinator)

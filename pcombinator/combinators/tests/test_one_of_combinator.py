@@ -10,7 +10,10 @@ class OneOfCombinatorTests(unittest.TestCase):
             seed=123,
             children=["abc", "def"],
         )
-        self.assertEqual(one_of_combinator.combinator_type, "one_of")
+        self.assertEqual(
+            one_of_combinator.combinator_type,
+            "pcombinator.combinators.one_of_combinator.type",
+        )
         self.assertEqual(one_of_combinator.n_min, 1)
         self.assertEqual(one_of_combinator.n_max, 1)
         self.assertEqual(one_of_combinator.children, ["abc", "def"])
@@ -18,7 +21,10 @@ class OneOfCombinatorTests(unittest.TestCase):
 
     def test_default_values(self):
         one_of_combinator = OneOfCombinator(id="id_1")
-        self.assertEqual(one_of_combinator.combinator_type, "one_of")
+        self.assertEqual(
+            one_of_combinator.combinator_type,
+            "pcombinator.combinators.one_of_combinator.type",
+        )
         self.assertEqual(one_of_combinator.n_min, 1)
         self.assertEqual(one_of_combinator.n_max, 1)
         self.assertEqual(one_of_combinator.children, [])

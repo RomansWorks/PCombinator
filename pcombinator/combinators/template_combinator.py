@@ -1,14 +1,16 @@
+import json
 from typing import Dict
 from jinja2 import Template
-from pydantic import PrivateAttr
 
 from pcombinator.combinators.combinator import (
     Combinator,
     IdTree,
+    combinator_dict_to_obj,
     render_children,
     derived_classes,
 )
 from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
+from pcombinator.util.classname import get_fully_qualified_class_name
 
 
 class Jinja2TemplateCombinator(Combinator):
@@ -18,7 +20,7 @@ class Jinja2TemplateCombinator(Combinator):
 
     # _combinator_type: Literal["jinja2_template"] = "jinja2_template"
 
-    _template: Template = PrivateAttr()
+    _template: Template
     template_source: str
     children: Dict[str, CombinatorOrLeaf]
 
@@ -27,13 +29,12 @@ class Jinja2TemplateCombinator(Combinator):
         id: str,
         template_source: str,
         children: Dict[str, CombinatorOrLeaf],
+        **kwargs,
     ):
         super().__init__(
             id=id,
-            template_source=template_source,
-            children=children,
-            # _combinator_type=self._combinator_type,
-            # combinator_type=__class__.__name__,
+            combinator_type=kwargs.get("combinator_type")
+            or get_fully_qualified_class_name(self.__class__),
         )
         self._template = Template(source=template_source)
         self.template_source = template_source
@@ -73,23 +74,41 @@ class Jinja2TemplateCombinator(Combinator):
                 return
 
     # def to_json(self):
-    #     return {
-    #         "combinator_type": self._combinator_type,
-    #         "id": self.id,
-    #         "template_source": self.template_source,
-    #         "children": {
-    #             key: self._child_to_json(child) for key, child in self.children.items()
-    #         },
-    #     }
+    #     return json.dumps(
+    #         {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
+    #     )
 
-    # def _child_to_json(self, child: CombinatorOrLeaf):
-    #     if isinstance(child, str):
-    #         return child
-    #     elif child is None:
-    #         return None
-    #     else:
-    #         return child.to_json()
+    @classmethod
+    def from_json(cls, values: dict):
+
+        return cls(
+            id=values["id"],
+            template_source=values["template_source"],
+            children={
+                key: Combinator.from_json(child) if child.startswith("{") else child
+                for key, child in values["children"].items()
+            },
+        )
+
+        # # Walk the children tree and convert each to an object
+        # children = values.get("children")
+        # # # If children is a list, then convert all dicts in the list to objects
+        # # if isinstance(children, list):
+        # #     for i, child in enumerate(children):
+        # #         if isinstance(child, dict):
+        # #             children[i] = combinator_dict_to_obj(children, i, child)
+        # #     return values
+
+        # # If children is a dict, then convert all values in the dict to objects and keep the keys
+        # if isinstance(children, dict):
+        #     for key, child in children.items():
+        #         if isinstance(child, dict):
+        #             child = combinator_dict_to_obj(child)
+        #             children[key] = child
+        #     values["children"] = children
+
+        # # return Jinja2TemplateCombinator(**values)
+        # return cls(**values)
 
 
-# derived_classes["jinja2_template"] = Jinja2TemplateCombinator
-# derived_classes[Jinja2TemplateCombinator.__name__] = Jinja2TemplateCombinator
+Combinator.register_derived_class(Jinja2TemplateCombinator)

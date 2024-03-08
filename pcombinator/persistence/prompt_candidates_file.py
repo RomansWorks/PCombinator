@@ -2,7 +2,6 @@ import json
 from dataclasses import dataclass
 from typing import Annotated, Dict, List, Union
 
-from pydantic import BaseModel, Field
 
 from pcombinator.combinators.combinator import Combinator, IdTree
 from pcombinator.combinators.tests.test_template_combinator import (
@@ -14,7 +13,7 @@ from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
 
 
 @dataclass
-class PromptCandidatesFile(BaseModel):
+class PromptCandidatesFile:
     version: str
     seed: int
     root_combinator: Annotated[
@@ -24,7 +23,8 @@ class PromptCandidatesFile(BaseModel):
             RandomJoinCombinator,
             TemplateCombinatorTests,
         ],
-        Field(discriminator="duck_type"),
+        # Field(discriminator="duck_type"),
+        None,  # Temporary
     ]
 
     generated_prompts: List[Dict[str, IdTree]]
@@ -42,8 +42,18 @@ class PromptCandidatesFile(BaseModel):
         with open(path, "rb") as f:
             return pickle.load(f)
 
-    def to_json(self, path: str) -> None:
-        json = self.model_dump_json()
+    def to_json(self) -> str:
+        return json.dumps(
+            {
+                "version": self.version,
+                "seed": self.seed,
+                "root_combinator": self.root_combinator.to_json(),
+                "generated_prompts": self.generated_prompts,
+            }
+        )
+
+    def to_json_file(self, path: str) -> None:
+        json = self.to_json()
         with open(path, "w") as f:
             f.write(json)
 

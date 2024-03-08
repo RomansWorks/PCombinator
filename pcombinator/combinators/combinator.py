@@ -1,27 +1,27 @@
+import inspect
 import json
-from typing import Any, Dict, List, NewType, Type, Union
-from pydantic import BaseModel, Field, model_validator, root_validator, validator
+from typing import Any, Dict, List, NewType, Optional, Type, Union
 
 from pcombinator.util.classname import get_fully_qualified_class_name
 
 IdTree = NewType("IdTree", Dict[str, "IdTree"])
 
 
-class Combinator(BaseModel):
+class Combinator:
     """
     Base class for combinators.
     """
 
-    combinator_type: str = Field(default=None, init=False)
+    combinator_type: str
     id: str
 
-    def __init__(self, id, **kwargs):
-        super().__init__(id=id, **kwargs)
+    def __init__(self, id: str, combinator_type: Optional[str], **kwargs):
+        super().__init__(**kwargs)
 
         self.id = id
-        if "combinator_type" in kwargs:
+        if combinator_type is not None:
             # From deserialization
-            self.combinator_type = kwargs["combinator_type"]
+            self.combinator_type = combinator_type
             # Verify that the combinator type is known
             self.__class__.verify_known_combinator_type(self.combinator_type)
         else:
@@ -38,7 +38,7 @@ class Combinator(BaseModel):
             )
 
     @classmethod
-    def register_derived_class(cls, derived_class: Type["Combinator"]):
+    def register_derived_class(cls, derived_class):
         fq_cls_name = get_fully_qualified_class_name(derived_class)
         # Verify that this has not been registered before with a different name
         if fq_cls_name in derived_classes:
@@ -63,56 +63,67 @@ class Combinator(BaseModel):
         """
         raise NotImplementedError("render() not implemented")
 
+    # def __dict__(self):
+    #     """
+    #     Create a dict over public fields of the combinator and of any derived classes.
+    #     """
+    #     # First get the list of public fields (only variables, no functions)
+    #     public_field_names = [name for name, value in self.__dict__.items()]
+
+    #     public_fields = [name for name, value in public_field_names]
+
+    #     # Return a dict
+    #     return {field: getattr(self, field) for field in public_fields}
+
+    # def __iter__(self):
+    #     """
+    #     Create an iterator over the public fields of the combinator and of any derived classes.
+    #     """
+    #     for field, value in self.__dict__.items():
+    #         yield field, value
+
+    @staticmethod
+    def default(obj):
+        """
+        Default method to serialize objects. If the object has a `to_json` method, it uses it.
+        """
+        if hasattr(obj, "to_json"):
+            return obj.to_json()
+        raise TypeError(
+            f"default() - Object of type {obj.__class__.__name__} is not JSON serializable"
+        )
+
     def to_json(self):
-        return self.model_dump_json()
+        return json.dumps(
+            self.to_dict(),
+            default=self.default,
+        )
 
-    @model_validator(mode="before")
-    def parse_nested(cls, values):
-        print("parse_nested called", values)
-        # If values is a dict, create an instance of the appropriate class
-        if not isinstance(values, dict):
-            return values
+    def to_dict(self):
+        res = {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
+        return res
+
+    @classmethod
+    def from_dict(cls, values: dict):
+        """
+        Create a new combinator from a dictionary.
+        """
+        combinator_type = values["combinator_type"]
+        if combinator_type in derived_classes:
+            return derived_classes[combinator_type].from_json(values)
         else:
-            # Walk the children tree and convert each to an object
-            children = values.get("children")
-            if children is None:
-                return values
-
-            # If children is a list, then convert all dicts in the list to objects
-            if isinstance(children, list):
-                for i, child in enumerate(children):
-                    if isinstance(child, dict):
-                        children[i] = combinator_dict_to_obj(children, i, child)
-                return values
-
-            # If children is a dict, then convert all values in the dict to objects and keep the keys
-            if isinstance(children, dict):
-                for key, child in children.items():
-                    if isinstance(child, dict):
-                        child = combinator_dict_to_obj(child)
-                        children[key] = child
-                return values
-
-            # Otherwise we don't know how to handle this children list
-            # TODO: It'd be better to move the conversion logic to the derived classes, since these know the structure of the children
-            raise ValueError(f"parse_nested: cannot convert children: {children}")
+            raise ValueError(f"Unknown combinator type (from_json): {combinator_type}")
 
     @classmethod
     def from_json(cls, json_str: str):
-        print("from_json called", json_str)
-        dict = json.loads(json_str)
-        combinator_type = dict["combinator_type"]
-        # dict.pop("combinator_type")  # Remove so that we don't confuse pydantic
-        if combinator_type in derived_classes:
-            return derived_classes[combinator_type].model_validate_strings(dict)
-        else:
-            raise ValueError(f"Unknown combinator type (from_json): {combinator_type}")
-        # data = validate_json(json_str)
-        # combinator_type = data["_combinator_type"]
-        # if combinator_type in derived_classes:
-        #     return derived_classes[combinator_type].from_json(data)
-        # else:
-        #     raise ValueError(f"Unknown combinator type: {combinator_type}")
+        if not json_str.startswith("{"):
+            # Workaround for the stange nesting rules of the json parser
+            return json_str
+        values = json.loads(json_str)
+        # If string value or none just return the value
+        if not isinstance(values, dict):
+            return values
+        return cls.from_dict(values)
 
 
 def render_children(
@@ -147,13 +158,18 @@ def render_children(
 derived_classes: Dict[str, Type[Combinator]] = {}
 
 
-def combinator_dict_to_obj(child):
+def combinator_dict_to_obj(
+    child: Union[dict, str, None]
+) -> Union[str, None, Combinator]:
+    # No need to convert string and None
+    if not isinstance(child, dict):
+        return child
+
     combinator_type = child.get("combinator_type")
-    if combinator_type is not None:
-        if combinator_type in derived_classes:
-            derived_class = derived_classes[combinator_type]
-            return derived_class.model_validate_strings(child)
-        else:
-            raise ValueError(
-                f"combinator_dict_to_obj: cannot convert dict to combinator object - unknown combinator type: {combinator_type}"
-            )
+    if combinator_type in derived_classes:
+        derived_class = derived_classes[combinator_type]
+        return derived_class(child)  # TODO: need to unwrap the dict
+    else:
+        raise ValueError(
+            f"combinator_dict_to_obj: cannot convert dict to combinator object - unknown combinator type: {combinator_type}"
+        )

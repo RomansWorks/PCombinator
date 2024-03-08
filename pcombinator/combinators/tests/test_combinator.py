@@ -50,7 +50,9 @@ class CombinatorTest(unittest.TestCase):
         print("=" * 80)
 
         # Assert
-        self.assertEqual(loaded_combinator, template_combinator)
+        # We'll convert both to text and compare them
+        self.assertEqual(template_combinator.to_json(), loaded_combinator.to_json())
+        # self.assertEqual(loaded_combinator.__dict__, template_combinator.__dict__)
 
 
 if __name__ == "__main__":

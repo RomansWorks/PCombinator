@@ -10,7 +10,7 @@
       "request": "launch",
       "program": "pcombinator/combinators/tests/test_combinator.py",
       "console": "integratedTerminal",
-      "justMyCode": false
+      // "justMyCode": false
     },
     {
       "name": "Debug Example.py",
@@ -18,7 +18,17 @@
       "request": "launch",
       "program": "examples/example.py",
       "console": "integratedTerminal",
-      "justMyCode": false
-    }
+      // "justMyCode": false
+    },
+    // Debug all tests usint the pytest framework
+    {
+      "name": "Debug All Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": "${workspaceFolder}/",
+      "console": "integratedTerminal",
+      // "justMyCode": false
+    } 
   ]
 }

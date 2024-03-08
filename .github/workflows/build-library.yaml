@@ -1,4 +1,4 @@
-name: Build
+name: build-library
 
 on:
   push:
@@ -28,4 +28,4 @@ jobs:
         run: |
           poetry install --no-root --extras http --extras yaml
       - name: Run unit tests
-        run: poetry run python -m unittest
+        run: poetry run python -m pytest
