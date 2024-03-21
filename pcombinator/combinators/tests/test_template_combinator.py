@@ -1,12 +1,49 @@
 import unittest
 from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
 
-from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
+from pcombinator.combinators.one_of_combinator import OneOfCombinator
+from pcombinator.combinators.some_of_combinator import SomeOfCombinator
 from pcombinator.combinators.template_combinator import Jinja2TemplateCombinator
 
 
 class TemplateCombinatorTests(unittest.TestCase):
-    def test_render(self):
+
+    def setUp(self) -> None:
+        self.single_path_template_combinator = (
+            self._generate_single_path_template_combinator()
+        )
+        self.multi_path_template_combinator = (
+            self._generate_multi_path_template_combinator()
+        )
+
+        return super().setUp()
+
+    def test_generate_paths(self):
+        # Act
+        paths = self.single_path_template_combinator.generate_paths()
+
+        # Assert
+        self.assertIn(
+            {
+                "template_1": {
+                    "role": "v",
+                    "task": "v",
+                    "question": {"question_randomizer_1": {"0": "option_1"}},
+                }
+            },
+            paths,
+        )
+        self.assertEqual(len(paths), 225)
+
+    def test_render_path(self):
+        # Act
+        paths = self.single_path_template_combinator.generate_paths()
+        result = self.single_path_template_combinator.render_path(paths[0])
+
+        # Assert
+        self.assertEqual(result, "value_1_of_role\nvalue_1_of_task\noption_1")
+
+    def _generate_single_path_template_combinator(self):
         # Create a TemplateCombinator instance
         template_source = "{{role}}\n{{task}}\n{{question}}\n"
 
@@ -16,36 +53,48 @@ class TemplateCombinatorTests(unittest.TestCase):
             children={
                 "role": "value_1_of_role",
                 "task": "value_1_of_task",
-                "question": RandomJoinCombinator(
+                "question": SomeOfCombinator(
                     id="question_randomizer_1",
                     n_max=1,
                     n_min=1,
                     children=["option_1"],
-                    separators=["\n"],
+                    separator="\n",
                 ),
             },
         )
 
-        # Render
-        result, id_tree = template_combinator.render()
+        return template_combinator
 
-        # Check the result
-        self.assertEqual(
-            result,
-            "value_1_of_role\nvalue_1_of_task\noption_1",
-        )
+    def _generate_multi_path_template_combinator(self):
+        template_source = "{{role}}\n{{task}}\n{{question}}\n"
 
-        # Check the id_tree
-        self.assertEqual(
-            id_tree,
-            {
-                "template_1": {
-                    "role": {},
-                    "task": {},
-                    "question": {"question_randomizer_1": {}},
-                }
+        template_combinator = Jinja2TemplateCombinator(
+            id="template_1",
+            template_source=template_source,
+            children={
+                "role": OneOfCombinator(
+                    "value_1_of_role",
+                    [FixedStringCombinator("key_of_val_2_role", "value_2_of_role")],
+                ),
+                "task": "value_1_of_task",
+                "question": SomeOfCombinator(
+                    id="question_randomizer_1",
+                    n_max=3,
+                    n_min=0,
+                    children=[
+                        "option_1",
+                        "option_2",
+                        "option_3",
+                        "option_4",
+                        "option_5",
+                        "option_6",
+                    ],
+                    separator="\n",
+                ),
             },
         )
+
+        return template_combinator
 
 
 if __name__ == "__main__":

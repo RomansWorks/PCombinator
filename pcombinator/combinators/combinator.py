@@ -1,4 +1,3 @@
-import inspect
 import json
 from typing import Any, Dict, List, NewType, Optional, Type, Union
 
@@ -55,32 +54,19 @@ class Combinator:
         """
         return self.id
 
-    def render(self) -> tuple[Union[str, None], IdTree]:
+    def generate_paths(self) -> List[IdTree]:
         """
-        Render self. To be implemented by subclasses.
+        Generate all paths in the tree under this combinator id.
+        """
+        raise NotImplementedError("generate_paths() not implemented")
+
+    def render_path(self, IdTree) -> tuple[Union[str, None], IdTree]:
+        """
+        Render one specfic combination of self, with the path in the tree determined by IdTree. To be implemented by subclasses.
 
         Note that it is expected that the output will contain the own id in the IdTree.
         """
-        raise NotImplementedError("render() not implemented")
-
-    # def __dict__(self):
-    #     """
-    #     Create a dict over public fields of the combinator and of any derived classes.
-    #     """
-    #     # First get the list of public fields (only variables, no functions)
-    #     public_field_names = [name for name, value in self.__dict__.items()]
-
-    #     public_fields = [name for name, value in public_field_names]
-
-    #     # Return a dict
-    #     return {field: getattr(self, field) for field in public_fields}
-
-    # def __iter__(self):
-    #     """
-    #     Create an iterator over the public fields of the combinator and of any derived classes.
-    #     """
-    #     for field, value in self.__dict__.items():
-    #         yield field, value
+        raise NotImplementedError("render_path() not implemented")
 
     @staticmethod
     def default(obj):
@@ -124,34 +110,6 @@ class Combinator:
         if not isinstance(values, dict):
             return values
         return cls.from_dict(values)
-
-
-def render_children(
-    children: List[Union["Combinator", str, None]]
-) -> tuple[List[Union[str, None]], IdTree]:
-    """
-    Recursively render children.
-    For each rendered child, include the rendered child's id tree in the returned IdTree.
-
-    Returns:
-        rendered_children: A list of rendered children
-        rendered_children_id_tree: An IdTree of rendered children
-    """
-    rendered_children = []
-    rendered_children_id_tree = {}
-    for child in children:
-        if isinstance(child, str):
-            rendered_children.append(child)
-            # rendered_child_id_tree[child.__hash__()] = {}
-            continue
-        elif child is None:
-            continue
-        rendered_child, rendered_child_id_tree = child.render()
-        rendered_children.append(rendered_child)
-        rendered_children_id_tree.update(rendered_child_id_tree)
-        # rendered_children_id_tree[child.get_id()] = rendered_child_id_tree
-
-    return rendered_children, rendered_children_id_tree
 
 
 # Map of combinator types to classes

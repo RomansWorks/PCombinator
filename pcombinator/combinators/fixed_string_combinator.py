@@ -1,4 +1,4 @@
-import json
+from typing import List, Union
 from pcombinator.combinators.combinator import Combinator, IdTree, derived_classes
 from pcombinator.util.classname import get_fully_qualified_class_name
 
@@ -36,17 +36,26 @@ class FixedStringCombinator(Combinator):
 
         self.string = string
 
-    def render(self) -> tuple[str, IdTree]:
+    def generate_paths(self) -> List[IdTree]:
         """
-        Render self, specifically returns the string and an empty IdTree since strings don't have an additional identifier.
+        Generate all paths in the tree under this combinator id.
         """
-        return self.string, {self.id: {}}
+        return [{self.id: {}}]
 
-    def render_all(self) -> tuple[str, IdTree]:
+    def generate_random_path(self) -> IdTree:
         """
-        Render self, specifically returns the string and an empty IdTree since strings don't have an additional identifier.
+        Generate a random path in the tree under this combinator id.
         """
-        return self.string, {self.id: {}}
+        return {self.id: {}}
+
+    def render_path(self, IdTree) -> Union[str, None]:
+        """
+        Render a specific path. In our case the path is expected to be empty.
+        """
+        if IdTree != {self.id: {}}:
+            raise "render_path called with either incorrect id or with children (this combinator does not support children)"
+        res = self.string
+        return res
 
     @classmethod
     def from_json(cls, values: dict):

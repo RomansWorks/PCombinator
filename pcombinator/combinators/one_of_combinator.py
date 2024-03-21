@@ -1,22 +1,17 @@
 import random
-from typing import List, Literal, Union
+from typing import List, Union
 from pcombinator.combinators.combinator import Combinator, derived_classes
 from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
-from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
+from pcombinator.combinators.some_of_combinator import SomeOfCombinator
 from pcombinator.util.classname import get_fully_qualified_class_name
 
 
-class OneOfCombinator(RandomJoinCombinator):
+class OneOfCombinator(SomeOfCombinator):
     """
-    On render, this combinator will randomly select one of the children and render it.
+    A combinator which renders exactly one of its children. Based on RandomJoinCombinator.
     """
 
     children: List[CombinatorOrLeaf]
-    # n_max: int
-    # n_min: int
-    # separators: List[str]
-    # seed: Union[int, None]
-    # random: random.Random
 
     def __init__(
         self,
@@ -29,7 +24,7 @@ class OneOfCombinator(RandomJoinCombinator):
             id=id,
             n_min=1,
             n_max=1,
-            separators=[""],
+            separator="",
             children=children,
             seed=seed,
             _random=random.Random(x=seed),

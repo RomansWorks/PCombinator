@@ -70,7 +70,7 @@ def main():
 
     n_samples = 5
     for idx in range(n_samples):
-        rendered, id_tree = root_combinator.render()
+        rendered, id_tree = root_combinator.render_any()
         print(f"Candidate {idx}:", rendered)
         print("Id tree:", id_tree)
         print()

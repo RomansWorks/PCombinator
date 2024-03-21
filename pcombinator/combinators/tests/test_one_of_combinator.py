@@ -20,15 +20,40 @@ class OneOfCombinatorTests(unittest.TestCase):
         self.assertEqual(one_of_combinator.id, "id_1")
 
     def test_default_values(self):
-        one_of_combinator = OneOfCombinator(id="id_1")
+        one_of_combinator = OneOfCombinator(id="id_1", children=["a", "b"])
         self.assertEqual(
             one_of_combinator.combinator_type,
             "pcombinator.combinators.one_of_combinator.type",
         )
         self.assertEqual(one_of_combinator.n_min, 1)
         self.assertEqual(one_of_combinator.n_max, 1)
-        self.assertEqual(one_of_combinator.children, [])
+        self.assertEqual(one_of_combinator.children, ["a", "b"])
         self.assertEqual(one_of_combinator.id, "id_1")
+
+    def test_generate_paths(self):
+        # Arrange
+        one_of_combinator = OneOfCombinator(id="id_1", children=["a", "b"])
+
+        # Act
+        paths = one_of_combinator.generate_paths()
+
+        # Assert
+        self.assertIn({"id_1": {"0": "a"}}, paths)
+        self.assertIn({"id_1": {"1": "b"}}, paths)
+        self.assertEqual(len(paths), 2)
+
+    def test_render_path(self):
+        # Arrange
+        one_of_combinator = OneOfCombinator(id="id_1", children=["a", "b"])
+        paths = one_of_combinator.generate_paths()
+
+        # Act
+        result_a = one_of_combinator.render_path(paths[0])
+        result_b = one_of_combinator.render_path(paths[1])
+
+        # Assert
+        self.assertEqual(result_a, "a")
+        self.assertEqual(result_b, "b")
 
 
 if __name__ == "__main__":

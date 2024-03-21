@@ -7,7 +7,9 @@
 
 # PCombinator
 
-A handy tool for generating variations of prompts for large language and vision models, and evaluating the effectiveness of each particle in the variation. With it you can systematically optimize your prompts. 
+A handy tool that serves two purposes:
+1. For generating variations of prompts for large language and vision models, and evaluating the effectiveness of each particle in the variation. With it you can systematically optimize your prompts. 
+2. For combining prompts from hierarchical ingredients at runtime, for example when different invocations of a model require slightly different prompts.
 
 Some examples of questions you can easily test using PCombinator:
 - Is giving a an example (few shot) to the prompt contributes to effectiveness? 
@@ -119,12 +121,23 @@ There are several types of combinators:
 
 # IdTree
 
-The IdTree identifies what elements went into the prompt. This is useful for later analysis of the contribution of different elements to the effectiveness of the prompt.
+The IdTree is a Bill of Materials - it identifies what elements went into the prompt, and in what order. 
+
+We use the IdTree for two purposes:
+1. When comparing prompts, this allows analysis of the contribution of different elements to the effectiveness of the prompt.
+2. When replacing parts of the prompt dynamically in runtime. 
 
 IdTree is returned by the `render()` method of combinators. It is built as following:
 1. It contains a single key, the `id` of the Combinator, and a value listing the IdTrees of the children.
 2. The IdTrees of its children can be a list or a dictionary, depending on the combinator. For template combinator, we want to associate the child with the template slot it fills, so we use a dictionary. For the other combinators, we just want to list the children, so we use a list.
 3. Combinators also accept strings as children, in which case for now we don't store any identifier in the IdTree. If you do want to store an identifier, use the `FixedStringCombinator` instead of the string. 
+
+## Jinja2TemplateCombinator
+
+This is implemented as a Jinja2 template for flexibility. 
+We'll also implement an f-string based template combinator. 
+Users can take the Jinja2TemplateCombinator to create similar combinators with any templating engine.
+
 
 # TODO: 
 1. Implement best practices templates   
@@ -136,7 +149,13 @@ IdTree is returned by the `render()` method of combinators. It is built as follo
 7. Decide if strings need an identifier in the IdTree for compatibility with the PromptBase library and PromptEvaluator. 
 8. Normalize convention around internal fields.
 9. Add support for encoding atoms such that they don't interfere with any separators.
+10. Add support for higher level context - so that best practices trees can be tuned. This is for parametrizing templates, not for filling in the final prompt template. 
+11. Policy for dealing with rendering of fields in nested templates in child combinators.
+12. Add extension outlets. 
 
+# Possible future ideas for refactoring
+
+1. See if we can unify the model of children being either a list or a dict, and create generic rendering methods with specific callbacks for each case.
 
 # Developing
 

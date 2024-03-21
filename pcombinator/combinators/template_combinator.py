@@ -1,12 +1,11 @@
-import json
-from typing import Dict
+import itertools
+from typing import Dict, List
 from jinja2 import Template
 
 from pcombinator.combinators.combinator import (
     Combinator,
     IdTree,
     combinator_dict_to_obj,
-    render_children,
     derived_classes,
 )
 from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
@@ -17,8 +16,6 @@ class Jinja2TemplateCombinator(Combinator):
     """
     A combinator that renders a template with its rendered children as arguments.
     """
-
-    # _combinator_type: Literal["jinja2_template"] = "jinja2_template"
 
     _template: Template
     template_source: str
@@ -36,27 +33,66 @@ class Jinja2TemplateCombinator(Combinator):
             combinator_type=kwargs.get("combinator_type")
             or get_fully_qualified_class_name(self.__class__),
         )
+
+        # Verify that children is a dict with at least one element
+        if not isinstance(children, dict) or len(children) == 0:
+            raise ValueError("children must be a dict with at least one element")
+
+        # Verify that template source is a non empty string
+        if not isinstance(template_source, str) or len(template_source) == 0:
+            raise ValueError("template_source must be a non empty string")
+
         self._template = Template(source=template_source)
         self.template_source = template_source
         self.children = children
 
-    def render(self) -> tuple[str, IdTree]:
+    def generate_paths(self) -> List[IdTree]:
         """
-        Render the template, passing the rendered children as arguments.
+        Generate all paths in the tree under this combinator id. Each path is a dict with the id of the combinator as the only key.
+        """
+        # Generate the paths for each child
+        children_paths = {
+            key: (
+                child
+                if isinstance(child, str)
+                else child.generate_paths() if child is not None else None
+            )
+            for key, child in self.children.items()
+        }
+
+        # Generate the cartesian product of all children paths
+        res = []
+        for combination in itertools.product(*children_paths.values()):
+            res.append({self.id: dict(zip(children_paths.keys(), combination))})
+
+        return res
+
+    def render_path(self, path: IdTree) -> str:
+        """
+        Render the template, passing the specific rendered children in `path` as arguments.
 
         Returns:
             rendered: The rendered template
-            rendered_id_tree: An IdTree of rendered children under this combinator id.
         """
+        # Verify that the path dict contains the key of this combinator
+        if len(path) != 1 or self.id not in path:
+            raise ValueError(
+                f"Path must contain the id of this combinator at the top level: {self.id}"
+            )
+
         rendered_children_dict = {}
-        res_id_tree = {self.id: {}}
         for key in self.children.keys():
-            rendered, id_tree = render_children([self.children[key]])
-            res_id_tree[self.id][key] = id_tree
-            rendered_children_dict[key] = rendered[0]
+            path_for_child = path[self.id][key]
+            child = self.children[key]
+            rendered = (
+                child
+                if isinstance(child, str)
+                else child.render_path(path_for_child) if child is not None else None
+            )
+            rendered_children_dict[key] = rendered
 
         res = self._template.render(rendered_children_dict)
-        return res, res_id_tree
+        return res
 
     def add_child(self, key: str, child: CombinatorOrLeaf) -> None:
         self.children[key] = child
@@ -73,11 +109,6 @@ class Jinja2TemplateCombinator(Combinator):
                 del self.children[key]
                 return
 
-    # def to_json(self):
-    #     return json.dumps(
-    #         {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
-    #     )
-
     @classmethod
     def from_json(cls, values: dict):
 
@@ -89,26 +120,6 @@ class Jinja2TemplateCombinator(Combinator):
                 for key, child in values["children"].items()
             },
         )
-
-        # # Walk the children tree and convert each to an object
-        # children = values.get("children")
-        # # # If children is a list, then convert all dicts in the list to objects
-        # # if isinstance(children, list):
-        # #     for i, child in enumerate(children):
-        # #         if isinstance(child, dict):
-        # #             children[i] = combinator_dict_to_obj(children, i, child)
-        # #     return values
-
-        # # If children is a dict, then convert all values in the dict to objects and keep the keys
-        # if isinstance(children, dict):
-        #     for key, child in children.items():
-        #         if isinstance(child, dict):
-        #             child = combinator_dict_to_obj(child)
-        #             children[key] = child
-        #     values["children"] = children
-
-        # # return Jinja2TemplateCombinator(**values)
-        # return cls(**values)
 
 
 Combinator.register_derived_class(Jinja2TemplateCombinator)

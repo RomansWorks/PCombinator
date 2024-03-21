@@ -9,7 +9,7 @@ from pcombinator.combinators.tests.test_template_combinator import (
 )
 from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
 from pcombinator.combinators.one_of_combinator import OneOfCombinator
-from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
+from pcombinator.combinators.some_of_combinator import SomeOfCombinator
 
 
 @dataclass
@@ -20,7 +20,7 @@ class PromptCandidatesFile:
         Union[
             FixedStringCombinator,
             OneOfCombinator,
-            RandomJoinCombinator,
+            SomeOfCombinator,
             TemplateCombinatorTests,
         ],
         # Field(discriminator="duck_type"),
@@ -30,6 +30,10 @@ class PromptCandidatesFile:
     generated_prompts: List[Dict[str, IdTree]]
 
     def to_pickle(self, path: str) -> None:
+        """
+        Save the object to a pickle file.
+        NOTE: pickle files are unsafe to load. Only load pickle files from trusted sources.
+        """
         import pickle
 
         with open(path, "wb") as f:
@@ -37,6 +41,10 @@ class PromptCandidatesFile:
 
     @staticmethod
     def from_pickle(path: str) -> "PromptCandidatesFile":
+        """
+        Load the object from a pickle file.
+        NOTE: pickle files are unsafe to load. Only load pickle files from trusted sources.
+        """
         import pickle
 
         with open(path, "rb") as f:
