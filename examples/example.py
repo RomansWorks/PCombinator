@@ -68,11 +68,13 @@ def main():
         },
     )
 
+    paths = root_combinator.generate_paths()
     n_samples = 5
     for idx in range(n_samples):
-        rendered, id_tree = root_combinator.render_any()
+        path = paths[idx]
+        rendered = root_combinator.render_path(path)
         print(f"Candidate {idx}:", rendered)
-        print("Id tree:", id_tree)
+        print("Id tree:", path)
         print()
 
 

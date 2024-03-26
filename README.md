@@ -4,6 +4,11 @@
 ![PyPI version](https://img.shields.io/pypi/v/Pcombinator)
 ![Python version](https://img.shields.io/badge/python-3.10-blue.svg)
 
+# Relevant papers
+
+1. [Premise Order Matters in Reasoning with Large Language Models](https://arxiv.org/pdf/2402.08939.pdf) . Note that this paper also measurers how distractors affect the performance of the model.
+2. 
+
 
 # PCombinator
 
@@ -152,10 +157,13 @@ Users can take the Jinja2TemplateCombinator to create similar combinators with a
 10. Add support for higher level context - so that best practices trees can be tuned. This is for parametrizing templates, not for filling in the final prompt template. 
 11. Policy for dealing with rendering of fields in nested templates in child combinators.
 12. Add extension outlets. 
+13. Add support for LLMLingua compression structures.
 
 # Possible future ideas for refactoring
 
 1. See if we can unify the model of children being either a list or a dict, and create generic rendering methods with specific callbacks for each case.
+
+
 
 # Developing
 
@@ -170,3 +178,5 @@ Users can take the Jinja2TemplateCombinator to create similar combinators with a
 ## Building the distribution
 
 `poetry build`
+
+

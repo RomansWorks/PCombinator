@@ -60,11 +60,9 @@ class Combinator:
         """
         raise NotImplementedError("generate_paths() not implemented")
 
-    def render_path(self, IdTree) -> tuple[Union[str, None], IdTree]:
+    def render_path(self, path: IdTree) -> Union[str, None]:
         """
-        Render one specfic combination of self, with the path in the tree determined by IdTree. To be implemented by subclasses.
-
-        Note that it is expected that the output will contain the own id in the IdTree.
+        Render one specific path. To be implemented by subclasses.
         """
         raise NotImplementedError("render_path() not implemented")
 

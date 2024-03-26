@@ -76,18 +76,44 @@ class SomeOfCombinator(Combinator):
         # Generate all paths for each combination
         paths = []
         for children_indices_combination in children_indices_combinations:
-            # Each combination is a list of child indices in the order of inclusion
-            path = {self.id: {}}
-            for i, child_index in enumerate(children_indices_combination):
-                child = self.children[child_index]
-                path[self.id][str(child_index)] = (
-                    child
-                    if isinstance(child, str)
-                    else child.generate_all_paths() if child is not None else []
-                )
-            paths.append(path)
+            paths.extend(
+                self._generate_paths_for_children_indices(children_indices_combination)
+            )
 
         return paths
+
+    def _generate_paths_for_children_indices(
+        self, children_indices_combination: List[int]
+    ) -> List[IdTree]:
+        # Each combination is a list of child indices in the order of inclusion
+        path = {self.id: {}}
+
+        all_child_paths = []
+        for i, child_index in enumerate(children_indices_combination):
+            child = self.children[child_index]
+            child_paths = self._get_paths_for_child(child)
+            all_child_paths.append(child_paths)  # Appends a list
+
+        all_child_paths_combinations = itertools.product(*all_child_paths)
+
+        # Each combination form all_child_paths_combinations is a single path across all children
+        # Reorgaze each into a dict with the child index as key
+        paths = []
+        for child_paths_combination in all_child_paths_combinations:
+            path[self.id] = {}
+            for i, child_index in enumerate(children_indices_combination):
+                path[self.id][str(child_index)] = child_paths_combination[i]
+            paths.append(path.copy())
+
+        return paths
+
+    def _get_paths_for_child(self, child) -> List[IdTree]:
+        if child is None:
+            return [{}]
+        elif isinstance(child, str):
+            return [child]
+        else:
+            return child.generate_paths()
 
     def render_path(self, path: IdTree) -> Union[str, None]:
         """
@@ -114,6 +140,9 @@ class SomeOfCombinator(Combinator):
                 else child.render_path(path_for_child) if child is not None else None
             )
             rendered_children.append(rendered_child)
+
+        # Remove all None values
+        rendered_children = [child for child in rendered_children if child is not None]
 
         # Join the children
         rendered = self.separator.join(rendered_children)

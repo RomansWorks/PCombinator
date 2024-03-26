@@ -48,12 +48,14 @@ class FixedStringCombinator(Combinator):
         """
         return {self.id: {}}
 
-    def render_path(self, IdTree) -> Union[str, None]:
+    def render_path(self, path: IdTree) -> Union[str, None]:
         """
         Render a specific path. In our case the path is expected to be empty.
         """
-        if IdTree != {self.id: {}}:
-            raise "render_path called with either incorrect id or with children (this combinator does not support children)"
+        if path != {self.id: {}}:
+            raise ValueError(
+                "render_path called with either incorrect id or with children (this combinator does not support children)"
+            )
         res = self.string
         return res
 

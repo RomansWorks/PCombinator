@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Annotated, Dict, List, Union
 
 
-from pcombinator.combinators.combinator import Combinator, IdTree
+from pcombinator.combinators.combinator import IdTree
 from pcombinator.combinators.tests.test_template_combinator import (
     TemplateCombinatorTests,
 )
