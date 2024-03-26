@@ -15,31 +15,35 @@
 
 A handy tool for building, manipulating and evaluating prompts in both development and production. 
 
-1. Generate variations of prompts for large language and vision models, and evaluate the effectiveness of each particle in the variation. With it you can systematically optimize your prompts. 
-2. Combine prompts from hierarchical ingredients at runtime, for example when different invocations of a model require slightly different prompts, retrieval augmentation, and more.
+
+
+🎯 Generate variations of prompts for large language and vision models, and evaluate the effectiveness of each particle in the variation. With it you can systematically optimize your prompts. 
+
+🎯 Combine prompts from hierarchical ingredients at runtime, for example when different invocations of a model require slightly different prompts, retrieval augmentation, and more.
 
 Some examples of questions you can easily test using PCombinator:
-- Is giving a an example (few shot) to the prompt contributes to effectiveness? 
-- Is a specific example or combination of examples better than the others?
-- Is this additional instruction helpful?
-- Is putting the examples before the rules or instructions better, or is it vice versa? (also see (article)[https://arxiv.org/pdf/2402.08939.pdf)])
-- Which delimiter is the best for separating examples? (also see [])
-- Does Chain of Though (CoT) help or just cost more?
-- Does the order of the examples matter?
-- Do I need this many examples?
-- Should I use an instructive language or a more conversational one?
-- Is a certain role for the model biases it better than another role?
-- Which terms in a text2image prompt contribute more to the effectiveness of the prompt?
-- Combine prompt injection techniques to evaluate how malicous users can exploit the model and overcome protections. (also see (article)[https://arxiv.org/abs/2401.03729])
+
+✅ Is giving a an example (few shot) to the prompt contributes to effectiveness? 
+✅ Is a specific example or combination of examples better than the others?
+✅ Is this additional instruction helpful?
+✅ Is putting the examples before the rules or instructions better, or is it vice versa? (also see (article)[https://arxiv.org/pdf/2402.08939.pdf)])
+✅ Which delimiter is the best for separating examples? (also see [])
+✅ Does Chain of Though (CoT) help or just cost more?
+✅ Does the order of the examples matter?
+✅ Do I need this many examples?
+✅ Should I use an instructive language or a more conversational one?
+✅ Is a certain role for the model biases it better than another role?
+✅ Which terms in a text2image prompt contribute more to the effectiveness of the prompt?
+✅ Combine prompt injection techniques to evaluate how malicous users can exploit the model and overcome protections. (also see (article)[https://arxiv.org/abs/2401.03729])
 
 There are two parts to the library, each can be used independently:
-1. The Combinators (arranged in a tree): which generate the prompts.
-2. The Evaluator: which evaluates the effectiveness of the prompts. This is work in progress. 
+1. The **Combinators** (arranged in a tree): which generate the prompts.
+2. The **Evaluator**: which evaluates the effectiveness of the prompts. This is work in progress. 
 
 Some metrics that can be used to evaluate the effectiveness of the prompts:
-- The score given by a human or a model judge to the output. 
-- Use existing labeled datasets and evaluators. 
-- The perplexity of the model on the prompt. 
+📈 The score given by a human or a model judge to the output. 
+📈 Use score on existing labeled datasets and evaluators. 
+📉 The perplexity of the model on the prompt. 
 
 ## How to use it?
 
@@ -137,6 +141,7 @@ To see how a Path is contstructed, please see (Path)[docs/path.md].
 
 
 # TODO: 
+
 - [ ] f-string based template combinator
 - [ ] Consider improving support for templating fields as output (i.e. the output contains a template field that needs to be filled by the user)
 - [ ] Add runtime extension outlets (e.g. for adding a new child to a combinator at a named position at runtime)
