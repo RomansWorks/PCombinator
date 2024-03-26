@@ -15,30 +15,32 @@
 
 A handy tool for building, manipulating and evaluating prompts in both development and production. 
 
-
-
-🎯 Generate variations of prompts for large language and vision models, and evaluate the effectiveness of each particle in the variation. With it you can systematically optimize your prompts. 
-
-🎯 Combine prompts from hierarchical ingredients at runtime, for example when different invocations of a model require slightly different prompts, retrieval augmentation, and more.
+- 🎯 Generate variations of prompts for large language and vision models, and evaluate the effectiveness of each particle in the variation. With it you can systematically optimize your prompts. 
+- 🎯 Combine prompts from hierarchical ingredients at runtime, for example when different invocations of a model require slightly different prompts, retrieval augmentation, and more.
 
 Some examples of questions you can easily test using PCombinator:
 
-✅ Is giving a an example (few shot) to the prompt contributes to effectiveness? 
-✅ Is a specific example or combination of examples better than the others?
-✅ Is this additional instruction helpful?
-✅ Is putting the examples before the rules or instructions better, or is it vice versa? (also see (article)[https://arxiv.org/pdf/2402.08939.pdf)])
-✅ Which delimiter is the best for separating examples? (also see [])
-✅ Does Chain of Though (CoT) help or just cost more?
-✅ Does the order of the examples matter?
-✅ Do I need this many examples?
-✅ Should I use an instructive language or a more conversational one?
-✅ Is a certain role for the model biases it better than another role?
-✅ Which terms in a text2image prompt contribute more to the effectiveness of the prompt?
-✅ Combine prompt injection techniques to evaluate how malicous users can exploit the model and overcome protections. (also see (article)[https://arxiv.org/abs/2401.03729])
+- ✅ Is giving a an example (few shot) to the prompt contributes to effectiveness?
+- ✅ Is a specific example or combination of examples better than the others?
+- ✅ Is this additional instruction helpful?
+- ✅ Is putting the examples before the rules or instructions better, or is it vice versa? (also see [article](https://arxiv.org/pdf/2402.08939.pdf))
+- ✅ Which delimiter is the best for separating examples? (also see [])
+- ✅ Does Chain of Though (CoT) help or just cost more?
+- ✅ Does the order of the examples matter?
+- ✅ Do I need this many examples?
+- ✅ Should I use an instructive language or a more conversational one?
+- ✅ Is a certain role for the model biases it better than another role?
+- ✅ Which terms in a text2image prompt contribute more to the effectiveness of the prompt?
+- ✅ Combine prompt injection techniques to evaluate how malicous users can exploit the model and overcome protections. (also see [article](https://arxiv.org/abs/2401.03729))
 
 There are two parts to the library, each can be used independently:
+
 1. The **Combinators** (arranged in a tree): which generate the prompts.
 2. The **Evaluator**: which evaluates the effectiveness of the prompts. This is work in progress. 
+
+There are two main **actions** in the library:
+1. **Generating** **Paths** - which are walks down the combinator tree, i.e. specific combinations of the ingredients in the tree. This is done using the `generate_paths` method of the combinator.
+2. **Rendering** a prompt: The process of generating a prompt from a path in the combinator tree. This is done using the `render_path` method of the combinator.
 
 Some metrics that can be used to evaluate the effectiveness of the prompts:
 📈 The score given by a human or a model judge to the output. 
@@ -82,11 +84,10 @@ template_combinator = Jinja2Template(
     },
 )
 
-# # Save the combinator tree for future use
+# # OPTIONAL: Save the combinator tree for future use
 # json_str = template_combinator.to_json()
 # with open("path/to/combinator.json", "w") as f:
 #     f.write(json_str)
-
 # # Loading the combinator tree looks as following:
 # with open("path/to/combinator.json", "r") as f:
 #     json_str = f.read()
@@ -94,16 +95,16 @@ template_combinator = Jinja2Template(
 
 # Create all the possible paths in the tree
 paths = template_combinator.generate_paths()
-selected_paths = random.sample(paths, n_samples)
 
 res = []
-for idx, path in enumerate(selected_paths):
-    rendered_prompt = root_combinator.render_path(path)
-    res.append((rendered_prompt, path))
-    print(rendered_prompt)
-    print("-" * 80)
-    print(path)
-    print("=" * 80)
+for idx, path in enumerate(paths):
+  # Render the path (creating the prompt)
+  rendered_prompt = root_combinator.render_path(path)
+  res.append((rendered_prompt, path))
+  print(rendered_prompt)
+  print("-" * 80)
+  print(path)
+  print("=" * 80)
 
 
 # Save the prompts and id_tree for later evaluation
@@ -136,7 +137,7 @@ With a Path object you can:
 2. Associate the ingredients of the prompt with an evaluation metric to measure the individual contribution of each ingredient to the effectiveness of the prompt.
 3. Replace parts of the path dynamically in runtime, for example injecting (retrieval) augmentation info into the prompt, changing rules based on user's permissions and context, and more.
 
-To see how a Path is contstructed, please see (Path)[docs/path.md].
+To see how a Path is contstructed, please see [Path](docs/path.md).
 
 
 
