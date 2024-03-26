@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Annotated, Dict, List, Union
 
 
-from pcombinator.combinators.combinator import IdTree
+from pcombinator.combinators.combinator import Path
 from pcombinator.combinators.tests.test_jinja2_template import (
     Jinja2TemplateTests,
 )
@@ -27,7 +27,7 @@ class PromptCandidatesFile:
         None,  # Temporary
     ]
 
-    generated_prompts: List[Dict[str, IdTree]]
+    generated_prompts: List[Dict[str, Path]]
 
     def to_pickle(self, path: str) -> None:
         """

@@ -1,5 +1,5 @@
 from typing import List, Union
-from pcombinator.combinators.combinator import Combinator, IdTree, derived_classes
+from pcombinator.combinators.combinator import Combinator, Path, derived_classes
 from pcombinator.util.classname import get_fully_qualified_class_name
 
 
@@ -7,7 +7,7 @@ class NamedString(Combinator):
     """
     A combinator that renders a fixed string.
 
-    NOTE: This is only necessary when you want to preserve the id of the string in the IdTree. Otherwise you can just use a string as a child of a higher combinator.
+    NOTE: This is only necessary when you want to preserve the id of the string in the Path. Otherwise you can just use a string as a child of a higher combinator.
     """
 
     string: str
@@ -36,13 +36,13 @@ class NamedString(Combinator):
 
         self.string = string
 
-    def generate_paths(self) -> List[IdTree]:
+    def generate_paths(self) -> List[Path]:
         """
         Generate all paths in the tree under this combinator id.
         """
         return [{self.id: {}}]
 
-    def render_path(self, path: IdTree) -> Union[str, None]:
+    def render_path(self, path: Path) -> Union[str, None]:
         """
         Render a specific path. In our case the path is expected to be empty.
         """

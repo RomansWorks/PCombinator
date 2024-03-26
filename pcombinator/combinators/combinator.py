@@ -3,7 +3,7 @@ from typing import Any, Dict, List, NewType, Optional, Type, Union
 
 from pcombinator.util.classname import get_fully_qualified_class_name
 
-IdTree = NewType("IdTree", Dict[str, "IdTree"])
+Path = NewType("Path", Dict[str, "Path"])
 
 
 class Combinator:
@@ -54,13 +54,13 @@ class Combinator:
         """
         return self.id
 
-    def generate_paths(self) -> List[IdTree]:
+    def generate_paths(self) -> List[Path]:
         """
         Generate all paths in the tree under this combinator id.
         """
         raise NotImplementedError("generate_paths() not implemented")
 
-    def render_path(self, path: IdTree) -> Union[str, None]:
+    def render_path(self, path: Path) -> Union[str, None]:
         """
         Render one specific path. To be implemented by subclasses.
         """

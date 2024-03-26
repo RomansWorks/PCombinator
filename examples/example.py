@@ -9,7 +9,7 @@ from rich import print, print_json
 def main():
 
     # This example picks one named string of several
-    # Named strings preserve the id in the IdTree, while regular strings do not
+    # Named strings preserve the id in the Path, while regular strings do not
     role_combinator = PickOne(
         id="role_combinator",
         children=[
@@ -137,7 +137,7 @@ Examples:
         print(f"[yellow] {rendered_prompt} [/yellow]")
         print()
         print(
-            f"\U000027A1 [bold blue] Candidate ingredients (IdTree) for prompt [/bold blue][bold white]{idx}[/bold white]:"
+            f"\U000027A1 [bold blue] Candidate ingredients (Path) for prompt [/bold blue][bold white]{idx}[/bold white]:"
         )
         pretty_path = json.dumps(path, indent=2)
         print_json(pretty_path)

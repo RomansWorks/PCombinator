@@ -3,7 +3,7 @@ from typing import Any, List, Union
 
 from pcombinator.combinators.combinator import (
     Combinator,
-    IdTree,
+    Path,
     combinator_dict_to_obj,
     derived_classes,
 )
@@ -55,7 +55,7 @@ class JoinSomeOf(Combinator):
         self.separator = separator
         self.children = children
 
-    def generate_paths(self) -> List[IdTree]:
+    def generate_paths(self) -> List[Path]:
 
         # Generate all unique combinations of n_min to n_max children indices
         children_indices_combinations = []
@@ -76,7 +76,7 @@ class JoinSomeOf(Combinator):
 
     def _generate_paths_for_children_indices(
         self, children_indices_combination: List[int]
-    ) -> List[IdTree]:
+    ) -> List[Path]:
         # Each combination is a list of child indices in the order of inclusion
         path = {self.id: {}}
 
@@ -99,7 +99,7 @@ class JoinSomeOf(Combinator):
 
         return paths
 
-    def _get_paths_for_child(self, child) -> List[IdTree]:
+    def _get_paths_for_child(self, child) -> List[Path]:
         if child is None:
             return [{}]
         elif isinstance(child, str):
@@ -107,7 +107,7 @@ class JoinSomeOf(Combinator):
         else:
             return child.generate_paths()
 
-    def render_path(self, path: IdTree) -> Union[str, None]:
+    def render_path(self, path: Path) -> Union[str, None]:
         """
         Render self for a specific path in the tree.
         """

@@ -4,7 +4,7 @@ from jinja2 import Template
 
 from pcombinator.combinators.combinator import (
     Combinator,
-    IdTree,
+    Path,
     combinator_dict_to_obj,
     derived_classes,
 )
@@ -46,7 +46,7 @@ class Jinja2Template(Combinator):
         self.template_source = template_source
         self.children = children
 
-    def generate_paths(self) -> List[IdTree]:
+    def generate_paths(self) -> List[Path]:
         """
         Generate all paths in the tree under this combinator id. Each path is a dict with the id of the combinator as the only key.
         """
@@ -67,7 +67,7 @@ class Jinja2Template(Combinator):
 
         return res
 
-    def render_path(self, path: IdTree) -> str:
+    def render_path(self, path: Path) -> str:
         """
         Render the template, passing the specific rendered children in `path` as arguments.
 
