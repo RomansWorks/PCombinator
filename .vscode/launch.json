@@ -16,7 +16,7 @@
       "name": "Debug Example.py",
       "type": "debugpy",
       "request": "launch",
-      "program": "examples/example.py",
+      "program": "examples/text2text/example.py",
       "console": "integratedTerminal",
       // "justMyCode": false
     },

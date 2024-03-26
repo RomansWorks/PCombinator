@@ -11,7 +11,7 @@ With a Path object you can:
 
 ## Example Path
 
-The following path is taken from the (example)[../examples/example.py]:
+The following path is taken from the (example)[../examples/text2text/example.py]:
 
 ```json
 {
@@ -78,7 +78,7 @@ Question: Get all records from the employees table
 Answer: SELECT * FROM employees 
 ```
 
-Please see and run the (example)[../examples/example.py] to see the full flow. 
+Please see and run the (example)[../examples/text2text/example.py] to see the full flow. 
 
 # How the Path is constructed
 

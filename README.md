@@ -13,7 +13,7 @@
 
 # PCombinator
 
-A handy tool for building, manipulating and evaluating prompts in both development and production. 
+A handy tool for building, manipulating and evaluating **prompts** in both development and production. 
 
 - 🎯 Generate variations of prompts for large language and vision models, and evaluate the effectiveness of each particle in the variation. With it you can systematically optimize your prompts. 
 - 🎯 Combine prompts from hierarchical ingredients at runtime, for example when different invocations of a model require slightly different prompts, retrieval augmentation, and more.
@@ -33,25 +33,30 @@ Some examples of questions you can easily test using PCombinator:
 - ✅ Which terms in a text2image prompt contribute more to the effectiveness of the prompt?
 - ✅ Combine prompt injection techniques to evaluate how malicous users can exploit the model and overcome protections. (also see [article](https://arxiv.org/abs/2401.03729))
 
+### Main Concepts
+
 There are two parts to the library, each can be used independently:
 
 1. The **Combinators** (arranged in a tree): which generate the prompts.
 2. The **Evaluator**: which evaluates the effectiveness of the prompts. This is work in progress. 
 
+#### Paths and Rendering
+
 There are two main **actions** in the library:
+
 1. **Generating** **Paths** - which are walks down the combinator tree, i.e. specific combinations of the ingredients in the tree. This is done using the `generate_paths` method of the combinator.
 2. **Rendering** a prompt: The process of generating a prompt from a path in the combinator tree. This is done using the `render_path` method of the combinator.
 
 Some metrics that can be used to evaluate the effectiveness of the prompts:
-📈 The score given by a human or a model judge to the output. 
-📈 Use score on existing labeled datasets and evaluators. 
-📉 The perplexity of the model on the prompt. 
+- 📈 The score given by a human or a model judge to the output. 
+- 📈 Use score on existing labeled datasets and evaluators. 
+- 📉 The perplexity of the model on the prompt. 
 
 ## How to use it?
 
 A simple example is below. A more full example is in the `examples` folder and at the end of this document. 
 
-### Simple example
+### Simple example - LLMs
 
 ```python
 import random
@@ -116,15 +121,23 @@ with open("path/to/prompt.json", "w") as f:
 See additional exampels in the `examples` folder and under `pcombinator/combinators/tests`.
 
 
+### Simple Example - Vision Models
 
-### Which combinators are available?
+```python
+# TODO
+```
+
+
+# Detailed explanation
+
+## Currently available combinators
 
 1. `JoinSomeOf`: Creates combinations of between n_min to n_max (inclusive) children in each combination. Renders with a separator between each child.
 2. `NamedString`: A string with an identifier. Useful for tracking the contribution of each part of the prompt.
 3. `PickOne`: Picks one of the children.
 4. `Jinja2Template`: A Jinja2 template combinator. Fills the template with the children.
 
-## More detailed explanation
+## How does it work?
 
 PCombinator creates combinations of prompts from a tree of other combinators, and eventually string or None values at the leaves. It also stores the identifiers used to create the specific combination, for later evaluation of the effectiveness of each node in the tree. The evaluation functionality itself is not yet implemented.
 
@@ -139,9 +152,7 @@ With a Path object you can:
 
 To see how a Path is contstructed, please see [Path](docs/path.md).
 
-
-
-# TODO: 
+# TODO items: 
 
 <details>
 <summary> List of TODOs. Click to expand. </summary>
@@ -158,6 +169,7 @@ To see how a Path is contstructed, please see [Path](docs/path.md).
 - [ ] Consider adding support for LLMLingua compression.
 - [ ] Add documentation regarding token counting, prompt distance, compression, and other optimization techniques.
 - [ ] Add additional literature pointers showing the sensitivity of outcomes to minor variation in prompt (specifically find the separators article)
+- [ ] Add vision model examples
 
 </details>
 <br/>
@@ -260,7 +272,7 @@ collection = CollectionStore.load(url="path/to/collection")
 
 # Full example
 
-See [Full Example](examples/example.py) for a full example of how to use the library, or click below to expand.
+See [Full Example](examples/text2text/example.py) for a full example of how to use the library, or click below to expand.
 
 ## Full Example code
 
