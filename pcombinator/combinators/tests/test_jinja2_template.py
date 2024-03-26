@@ -1,12 +1,9 @@
 import unittest
-from pcombinator.combinators.named_string import NamedString
 
-from pcombinator.combinators.pick_one import PickOne
-from pcombinator.combinators.join_some_of import JoinSomeOf
-from pcombinator.combinators.jinja2_template import Jinja2Template
+from pcombinator.combinators import Jinja2Template, JoinSomeOf, NamedString, PickOne
 
 
-class TemplateCombinatorTests(unittest.TestCase):
+class Jinja2TemplateTests(unittest.TestCase):
 
     def setUp(self) -> None:
         self.single_path_template_combinator = (

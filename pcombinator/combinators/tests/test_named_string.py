@@ -1,8 +1,9 @@
 import unittest
-from pcombinator.combinators.named_string import NamedString
+
+from pcombinator.combinators import NamedString
 
 
-class FixedStringCombinatorTest(unittest.TestCase):
+class NamedStringTest(unittest.TestCase):
 
     def test_render_path(self):
         # Arrange

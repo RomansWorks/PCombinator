@@ -1,8 +1,5 @@
 from typing import List
-from pcombinator.combinators.join_some_of import JoinSomeOf
-from pcombinator.combinators.named_string import NamedString
-from pcombinator.combinators.jinja2_template import Jinja2Template
-from pcombinator.combinators.pick_one import PickOne
+from pcombinator.combinators import JoinSomeOf, NamedString, Jinja2Template, PickOne
 
 import json
 from rich import print, print_json

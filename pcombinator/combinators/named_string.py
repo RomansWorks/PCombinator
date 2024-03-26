@@ -42,12 +42,6 @@ class NamedString(Combinator):
         """
         return [{self.id: {}}]
 
-    def generate_random_path(self) -> IdTree:
-        """
-        Generate a random path in the tree under this combinator id.
-        """
-        return {self.id: {}}
-
     def render_path(self, path: IdTree) -> Union[str, None]:
         """
         Render a specific path. In our case the path is expected to be empty.

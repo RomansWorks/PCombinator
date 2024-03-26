@@ -1,9 +1,10 @@
 import unittest
 from unittest.mock import patch
-from pcombinator.combinators.join_some_of import JoinSomeOf
+
+from pcombinator.combinators import JoinSomeOf
 
 
-class SomeOfCombinatorTests(unittest.TestCase):
+class JoinSomeOfTests(unittest.TestCase):
     def setUp(self) -> None:
         self.three_values_some_of_combinator = JoinSomeOf(
             id="test_combinator_id_1",

@@ -1,9 +1,7 @@
 import unittest
 
 from pcombinator.combinators.combinator import Combinator
-from pcombinator.combinators.named_string import NamedString
-from pcombinator.combinators.join_some_of import JoinSomeOf
-from pcombinator.combinators.jinja2_template import Jinja2Template
+from pcombinator.combinators import Jinja2Template, JoinSomeOf, NamedString
 
 
 class CombinatorTest(unittest.TestCase):

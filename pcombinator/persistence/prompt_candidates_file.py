@@ -4,8 +4,8 @@ from typing import Annotated, Dict, List, Union
 
 
 from pcombinator.combinators.combinator import IdTree
-from pcombinator.combinators.tests.test_template_combinator import (
-    TemplateCombinatorTests,
+from pcombinator.combinators.tests.test_jinja2_template import (
+    Jinja2TemplateTests,
 )
 from pcombinator.combinators.named_string import NamedString
 from pcombinator.combinators.pick_one import PickOne
@@ -21,7 +21,7 @@ class PromptCandidatesFile:
             NamedString,
             PickOne,
             JoinSomeOf,
-            TemplateCombinatorTests,
+            Jinja2TemplateTests,
         ],
         # Field(discriminator="duck_type"),
         None,  # Temporary

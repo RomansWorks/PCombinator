@@ -1,9 +1,9 @@
 import unittest
-from pcombinator.combinators.pick_one import PickOne
-from pcombinator.combinators.combinator import Combinator
+
+from pcombinator.combinators import PickOne
 
 
-class OneOfCombinatorTests(unittest.TestCase):
+class PickOneTests(unittest.TestCase):
     def test_initialization(self):
         one_of_combinator = PickOne(
             id="id_1",
@@ -12,7 +12,7 @@ class OneOfCombinatorTests(unittest.TestCase):
         )
         self.assertEqual(
             one_of_combinator.combinator_type,
-            "pcombinator.combinators.one_of_combinator.type",
+            "pcombinator.combinators.pick_one.type",
         )
         self.assertEqual(one_of_combinator.n_min, 1)
         self.assertEqual(one_of_combinator.n_max, 1)
@@ -23,7 +23,7 @@ class OneOfCombinatorTests(unittest.TestCase):
         one_of_combinator = PickOne(id="id_1", children=["a", "b"])
         self.assertEqual(
             one_of_combinator.combinator_type,
-            "pcombinator.combinators.one_of_combinator.type",
+            "pcombinator.combinators.pick_one.type",
         )
         self.assertEqual(one_of_combinator.n_min, 1)
         self.assertEqual(one_of_combinator.n_max, 1)
