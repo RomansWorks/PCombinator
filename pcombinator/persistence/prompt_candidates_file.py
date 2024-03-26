@@ -3,13 +3,13 @@ from dataclasses import dataclass
 from typing import Annotated, Dict, List, Union
 
 
-from pcombinator.combinators.combinator import Combinator, IdTree
-from pcombinator.combinators.tests.test_template_combinator import (
-    TemplateCombinatorTests,
+from pcombinator.combinators.combinator import Path
+from pcombinator.combinators.tests.test_jinja2_template import (
+    Jinja2TemplateTests,
 )
-from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
-from pcombinator.combinators.one_of_combinator import OneOfCombinator
-from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
+from pcombinator.combinators.named_string import NamedString
+from pcombinator.combinators.pick_one import PickOne
+from pcombinator.combinators.join_some_of import JoinSomeOf
 
 
 @dataclass
@@ -18,18 +18,22 @@ class PromptCandidatesFile:
     seed: int
     root_combinator: Annotated[
         Union[
-            FixedStringCombinator,
-            OneOfCombinator,
-            RandomJoinCombinator,
-            TemplateCombinatorTests,
+            NamedString,
+            PickOne,
+            JoinSomeOf,
+            Jinja2TemplateTests,
         ],
         # Field(discriminator="duck_type"),
         None,  # Temporary
     ]
 
-    generated_prompts: List[Dict[str, IdTree]]
+    generated_prompts: List[Dict[str, Path]]
 
     def to_pickle(self, path: str) -> None:
+        """
+        Save the object to a pickle file.
+        NOTE: pickle files are unsafe to load. Only load pickle files from trusted sources.
+        """
         import pickle
 
         with open(path, "wb") as f:
@@ -37,6 +41,10 @@ class PromptCandidatesFile:
 
     @staticmethod
     def from_pickle(path: str) -> "PromptCandidatesFile":
+        """
+        Load the object from a pickle file.
+        NOTE: pickle files are unsafe to load. Only load pickle files from trusted sources.
+        """
         import pickle
 
         with open(path, "rb") as f:

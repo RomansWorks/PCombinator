@@ -1,13 +1,13 @@
-import json
-from pcombinator.combinators.combinator import Combinator, IdTree, derived_classes
+from typing import List, Union
+from pcombinator.combinators.combinator import Combinator, Path, derived_classes
 from pcombinator.util.classname import get_fully_qualified_class_name
 
 
-class FixedStringCombinator(Combinator):
+class NamedString(Combinator):
     """
     A combinator that renders a fixed string.
 
-    NOTE: This is only necessary when you want to preserve the id of the string in the IdTree. Otherwise you can just use a string as a child of a higher combinator.
+    NOTE: This is only necessary when you want to preserve the id of the string in the Path. Otherwise you can just use a string as a child of a higher combinator.
     """
 
     string: str
@@ -36,17 +36,22 @@ class FixedStringCombinator(Combinator):
 
         self.string = string
 
-    def render(self) -> tuple[str, IdTree]:
+    def generate_paths(self) -> List[Path]:
         """
-        Render self, specifically returns the string and an empty IdTree since strings don't have an additional identifier.
+        Generate all paths in the tree under this combinator id.
         """
-        return self.string, {self.id: {}}
+        return [{self.id: {}}]
 
-    def render_all(self) -> tuple[str, IdTree]:
+    def render_path(self, path: Path) -> Union[str, None]:
         """
-        Render self, specifically returns the string and an empty IdTree since strings don't have an additional identifier.
+        Render a specific path. In our case the path is expected to be empty.
         """
-        return self.string, {self.id: {}}
+        if path != {self.id: {}}:
+            raise ValueError(
+                "render_path called with either incorrect id or with children (this combinator does not support children)"
+            )
+        res = self.string
+        return res
 
     @classmethod
     def from_json(cls, values: dict):
@@ -56,4 +61,4 @@ class FixedStringCombinator(Combinator):
         )
 
 
-Combinator.register_derived_class(FixedStringCombinator)
+Combinator.register_derived_class(NamedString)

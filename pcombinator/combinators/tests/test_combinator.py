@@ -1,38 +1,24 @@
 import unittest
 
-from pcombinator.combinators.combinator import Combinator, render_children
-from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
-from pcombinator.combinators.random_join_combinator import RandomJoinCombinator
-from pcombinator.combinators.template_combinator import Jinja2TemplateCombinator
+from pcombinator.combinators.combinator import Combinator
+from pcombinator.combinators import Jinja2Template, JoinSomeOf, NamedString
 
 
 class CombinatorTest(unittest.TestCase):
-    def test_render_children(self):
-        # Arrange
-        children = ["abc", "def", FixedStringCombinator(id="id1", string="ghi")]
-
-        # Act
-        rendered_text, id_tree = render_children(children)
-
-        # Assert
-        self.assertEqual(rendered_text, ["abc", "def", "ghi"])
-        self.assertEqual(id_tree, {"id1": {}})
 
     def test_json_peristence(self):
         # Arrange
-        seed = 1007
         template_source = "{{role}}\n{{task}}\n{{question}}\n"
-        template_combinator = Jinja2TemplateCombinator(
+        template_combinator = Jinja2Template(
             template_source=template_source,
             children={
-                "role": FixedStringCombinator("role_id", "value_1"),
+                "role": NamedString("role_id", "value_1"),
                 "task": "task_value",
-                "question": RandomJoinCombinator(
+                "question": JoinSomeOf(
                     n_max=1,
                     n_min=1,
                     children=["option_1"],
-                    separators=["\n"],
-                    seed=seed,
+                    separator="\n",
                     id="question_randomizer_1",
                 ),
             },
@@ -52,7 +38,6 @@ class CombinatorTest(unittest.TestCase):
         # Assert
         # We'll convert both to text and compare them
         self.assertEqual(template_combinator.to_json(), loaded_combinator.to_json())
-        # self.assertEqual(loaded_combinator.__dict__, template_combinator.__dict__)
 
 
 if __name__ == "__main__":

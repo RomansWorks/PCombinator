@@ -1,25 +1,31 @@
+import random
 from typing import List
-from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
-from pcombinator.combinators.template_combinator import Jinja2TemplateCombinator
-from pcombinator.combinators.one_of_combinator import OneOfCombinator
+from pcombinator.combinators import JoinSomeOf, NamedString, Jinja2Template, PickOne
+
+import json
+from rich import print, print_json
 
 
 def main():
-    role_combinator = OneOfCombinator(
-        id="role",
+
+    # This example picks one named string of several
+    # Named strings preserve the id in the Path, while regular strings do not
+    role_combinator = PickOne(
+        id="role_combinator",
         children=[
-            FixedStringCombinator(
+            NamedString(
                 id="1", string="You're a highly precise language model assistant."
             ),
-            FixedStringCombinator(
+            NamedString(
                 id="2",
                 string="You're an expert teacher with creative approach to explaining.",
             ),
         ],
     )
 
-    task_combinator = OneOfCombinator(
-        id="task",
+    # This example picks one string of several
+    task_combinator = PickOne(
+        id="task_combinator",
         children=[
             "Your task is to explain concepts provided by the user on three levels - ELI5, intuitive and rigorous.",
             "Your task is to explain concepts provided by the user on three levels - beginner, intermediate, expert.",
@@ -27,8 +33,8 @@ def main():
         ],
     )
 
-    tone_combinator = OneOfCombinator(
-        id="tone",
+    tone_combinator = PickOne(
+        id="tone_combinator",
         children=[
             "Use a friendly and supporive tone.",
             "Use clean and professional tone.",
@@ -36,44 +42,106 @@ def main():
         ],
     )
 
-    step_by_step_combinator = OneOfCombinator(
-        id="step_by_step",
+    step_by_step_combinator = PickOne(
+        id="step_by_step_combinator",
         children=[
             """Use the following step by step instruction to answer the user query:
-            Step 1: Rephrase the user question or request.
-            Step 2: Answer the question or request.
-             """,
+Step 1: Rephrase the user question or request.
+Step 2: Answer the question or request.
+""",
             """Follow these steps when answering the user query:
-            Step 1: Briefly rephrase the user question or request.
-            Step 2: Answer the question or request.
-            """,
+Step 1: Briefly rephrase the user question or request.
+Step 2: Answer the question or request.
+""",
             "Think step by step.",
             None,
         ],
     )
 
-    root_combinator = Jinja2TemplateCombinator(
+    # Example of generating a list of samples from a dict, and combining some of them with a separator
+    examples_list = [
+        {
+            "question:": "Get all records from the employees table",
+            "answer": "SELECT * FROM employees",
+        },
+        {
+            "question:": 'Get the single customer with id "PCombinator"',
+            "answer": "SELECT DISTINCT * FROM customers WHERE id = 'PCombinator'",
+        },
+        {
+            "question:": "Get the top 10 customers by revenue",
+            "answer": "SELECT * FROM customers ORDER BY revenue DESC LIMIT 10",
+        },
+    ]
+
+    example_strings = [
+        f"Question: {example['question:']}\nAnswer: {example['answer']}"
+        for example in examples_list
+    ]
+    example_named_strings = [
+        NamedString(id=str(idx), string=example)
+        for idx, example in enumerate(example_strings)
+    ]
+
+    examples_combinator = JoinSomeOf(
+        id="examples_combinator",
+        n_min=1,
+        n_max=3,
+        separator="\n",
+        children=example_named_strings,
+    )
+
+    # Tipping - a way to encourage the model to yield better responses
+    tip_combinator = PickOne(
+        id="tip_combinator",
+        children=[
+            "I'm going to tip $1 for a perfect response!",
+            "I'm going to tip $10 for a perfect response!",
+            "I'm going to tip $100 for a perfect response!",
+            None,
+        ],
+    )
+
+    # This example is for using a Jinja2 template to combine the strings
+    root_combinator = Jinja2Template(
         id="root",
         template_source="""
-        {{ role }}
-        {{ task }}
-        {{ tone }}
-        {{ step_by_step }}
-        """,
+{{ role }}
+{{ task }}
+{{ tone }}
+{{ step_by_step }}
+{{ tip }}
+Examples:
+====
+{{ examples }}
+""",
         children={
             "role": role_combinator,
             "task": task_combinator,
             "tone": tone_combinator,
             "step_by_step": step_by_step_combinator,
+            "tip": tip_combinator,
+            "examples": examples_combinator,
         },
     )
 
+    paths = root_combinator.generate_paths()
     n_samples = 5
-    for idx in range(n_samples):
-        rendered, id_tree = root_combinator.render()
-        print(f"Candidate {idx}:", rendered)
-        print("Id tree:", id_tree)
+    # Pick 5 samples in random
+    selected_paths = random.sample(paths, n_samples)
+    for idx, path in enumerate(selected_paths):
+        rendered_prompt = root_combinator.render_path(path)
+        print(
+            f"\U000027A1 [bold blue] Candidate prompt [/bold blue][bold white]{idx}[/bold white]: "
+        )
+        print(f"[yellow] {rendered_prompt} [/yellow]")
         print()
+        print(
+            f"\U000027A1 [bold blue] Candidate ingredients (Path) for prompt [/bold blue][bold white]{idx}[/bold white]:"
+        )
+        pretty_path = json.dumps(path, indent=2)
+        print_json(pretty_path)
+        print("=" * 80)
 
 
 # Main
