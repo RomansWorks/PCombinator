@@ -8,7 +8,7 @@
 
 1. [Premise Order Matters in Reasoning with Large Language Models](https://arxiv.org/pdf/2402.08939.pdf) . Note that this paper also measurers how distractors affect the performance of the model.
 2. [The Butterfly Effect of Altering Prompts: How Small Changes and Jailbreaks Affect Large Language Model Performance](https://arxiv.org/abs/2401.03729)
-3. 
+3. Help needed - additional references on the sensitivity of outcomes to minor variation in prompt (specifically find the separators article) 
 
 
 # PCombinator
