@@ -4,10 +4,11 @@
 ![PyPI version](https://img.shields.io/pypi/v/Pcombinator)
 ![Python version](https://img.shields.io/badge/python-3.10-blue.svg)
 
-# Relevant papers
+# Some Relevant papers
 
 1. [Premise Order Matters in Reasoning with Large Language Models](https://arxiv.org/pdf/2402.08939.pdf) . Note that this paper also measurers how distractors affect the performance of the model.
-2. 
+2. [The Butterfly Effect of Altering Prompts: How Small Changes and Jailbreaks Affect Large Language Model Performance](https://arxiv.org/abs/2401.03729)
+3. 
 
 
 # PCombinator
@@ -28,6 +29,7 @@ Some examples of questions you can easily test using PCombinator:
 - Should I use an instructive language or a more conversational one?
 - Is a certain role for the model biases it better than another role?
 - Which terms in a text2image prompt contribute more to the effectiveness of the prompt?
+- Combine prompt injection techniques to evaluate how malicous users can exploit the model and overcome protections.
 
 There are two parts to the library, each can be used independently:
 1. The Combinators (arranged in a tree): which generate the prompts.
@@ -159,7 +161,6 @@ Users can take the Jinja2TemplateCombinator to create similar combinators with a
 12. Add extension outlets. 
 13. Add support for LLMLingua compression structures.
 
-- [ ] Commit seed and random removal
 - [ ] Add section for persistance - prompt combinators vs prompts
 - [ ] Add section for evaluation
 - [ ] Change example

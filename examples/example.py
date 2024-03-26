@@ -1,3 +1,4 @@
+import random
 from typing import List
 from pcombinator.combinators import JoinSomeOf, NamedString, Jinja2Template, PickOne
 
@@ -90,6 +91,17 @@ Step 2: Answer the question or request.
         children=example_named_strings,
     )
 
+    # Tipping - a way to encourage the model to yield better responses
+    tip_combinator = PickOne(
+        id="tip_combinator",
+        children=[
+            "I'm going to tip $1 for a perfect response!",
+            "I'm going to tip $10 for a perfect response!",
+            "I'm going to tip $100 for a perfect response!",
+            None,
+        ],
+    )
+
     # This example is for using a Jinja2 template to combine the strings
     root_combinator = Jinja2Template(
         id="root",
@@ -98,7 +110,9 @@ Step 2: Answer the question or request.
 {{ task }}
 {{ tone }}
 {{ step_by_step }}
+{{ tip }}
 Examples:
+====
 {{ examples }}
 """,
         children={
@@ -106,14 +120,16 @@ Examples:
             "task": task_combinator,
             "tone": tone_combinator,
             "step_by_step": step_by_step_combinator,
+            "tip": tip_combinator,
             "examples": examples_combinator,
         },
     )
 
     paths = root_combinator.generate_paths()
     n_samples = 5
-    for idx in range(n_samples):
-        path = paths[idx]
+    # Pick 5 samples in random
+    selected_paths = random.sample(paths, n_samples)
+    for idx, path in enumerate(selected_paths):
         rendered_prompt = root_combinator.render_path(path)
         print(
             f"\U000027A1 [bold blue] Candidate prompt [/bold blue][bold white]{idx}[/bold white]: "
