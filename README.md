@@ -159,6 +159,16 @@ Users can take the Jinja2TemplateCombinator to create similar combinators with a
 12. Add extension outlets. 
 13. Add support for LLMLingua compression structures.
 
+- [ ] Commit seed and random removal
+- [ ] Add section for persistance - prompt combinators vs prompts
+- [ ] Add section for evaluation
+- [ ] Change example
+- [ ] Split docs with pointers
+- [ ] Collapsible sections in docs
+- [ ] Add separators article
+- [ ] Go over list of "can do" and update it
+
+
 # Possible future ideas for refactoring
 
 1. See if we can unify the model of children being either a list or a dict, and create generic rendering methods with specific callbacks for each case.

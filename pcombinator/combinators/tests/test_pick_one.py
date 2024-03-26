@@ -7,7 +7,6 @@ class PickOneTests(unittest.TestCase):
     def test_initialization(self):
         one_of_combinator = PickOne(
             id="id_1",
-            seed=123,
             children=["abc", "def"],
         )
         self.assertEqual(

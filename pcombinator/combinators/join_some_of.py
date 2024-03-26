@@ -1,5 +1,4 @@
 import itertools
-import random as rnd
 from typing import Any, List, Union
 
 from pcombinator.combinators.combinator import (
@@ -14,7 +13,7 @@ from pcombinator.util.classname import get_fully_qualified_class_name
 
 class JoinSomeOf(Combinator):
     """
-    On render, this combinator will randomly select a number of children between n_min and n_max (inclusive)
+    On render, this combinator will select a number of children between n_min and n_max (inclusive)
     and join them with the separator.
     """
 
@@ -22,9 +21,6 @@ class JoinSomeOf(Combinator):
     n_min: int
     n_max: int
     separator: str
-    seed: Union[int, None]
-
-    _random: Any
 
     def __init__(
         self,
@@ -33,8 +29,6 @@ class JoinSomeOf(Combinator):
         n_max: int = 1,
         separator: str = "\n",
         children: List[CombinatorOrLeaf] = [],
-        seed: Union[int, None] = None,
-        _random: Union[Any, None] = None,
         **kwargs,
     ):
         super().__init__(
@@ -59,8 +53,6 @@ class JoinSomeOf(Combinator):
         self.n_min = n_min
         self.n_max = n_max
         self.separator = separator
-        self._random = _random or rnd.Random(x=seed)
-        self.seed = seed
         self.children = children
 
     def generate_paths(self) -> List[IdTree]:
@@ -170,7 +162,6 @@ class JoinSomeOf(Combinator):
             n_max=values["n_max"],
             separator=values["separator"],
             children=[Combinator.from_json(child) for child in values["children"]],
-            seed=values["seed"],
         )
 
 

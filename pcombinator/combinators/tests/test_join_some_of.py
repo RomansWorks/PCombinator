@@ -12,7 +12,6 @@ class JoinSomeOfTests(unittest.TestCase):
             n_max=3,
             children=["abc", "def", "ghi"],
             separator="-",
-            seed=1007,
         )
 
         self.five_values_some_of_combinator = JoinSomeOf(
@@ -21,7 +20,6 @@ class JoinSomeOfTests(unittest.TestCase):
             n_max=4,
             children=["abc", "def", "ghi", "123", "^_$"],
             separator="-",
-            seed=1007,
         )
         return super().setUp()
 

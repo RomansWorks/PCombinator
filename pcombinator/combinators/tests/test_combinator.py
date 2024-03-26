@@ -8,7 +8,6 @@ class CombinatorTest(unittest.TestCase):
 
     def test_json_peristence(self):
         # Arrange
-        seed = 1007
         template_source = "{{role}}\n{{task}}\n{{question}}\n"
         template_combinator = Jinja2Template(
             template_source=template_source,
@@ -20,7 +19,6 @@ class CombinatorTest(unittest.TestCase):
                     n_min=1,
                     children=["option_1"],
                     separator="\n",
-                    seed=seed,
                     id="question_randomizer_1",
                 ),
             },
