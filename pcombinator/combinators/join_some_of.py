@@ -12,7 +12,7 @@ from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
 from pcombinator.util.classname import get_fully_qualified_class_name
 
 
-class SomeOfCombinator(Combinator):
+class JoinSomeOf(Combinator):
     """
     On render, this combinator will randomly select a number of children between n_min and n_max (inclusive)
     and join them with the separator.
@@ -174,4 +174,4 @@ class SomeOfCombinator(Combinator):
         )
 
 
-Combinator.register_derived_class(SomeOfCombinator)
+Combinator.register_derived_class(JoinSomeOf)

@@ -1,9 +1,9 @@
 import unittest
-from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
+from pcombinator.combinators.named_string import NamedString
 
-from pcombinator.combinators.one_of_combinator import OneOfCombinator
-from pcombinator.combinators.some_of_combinator import SomeOfCombinator
-from pcombinator.combinators.template_combinator import Jinja2TemplateCombinator
+from pcombinator.combinators.pick_one import PickOne
+from pcombinator.combinators.join_some_of import JoinSomeOf
+from pcombinator.combinators.jinja2_template import Jinja2Template
 
 
 class TemplateCombinatorTests(unittest.TestCase):
@@ -47,13 +47,13 @@ class TemplateCombinatorTests(unittest.TestCase):
         # Create a TemplateCombinator instance
         template_source = "{{role}}\n{{task}}\n{{question}}\n"
 
-        template_combinator = Jinja2TemplateCombinator(
+        template_combinator = Jinja2Template(
             id="template_1",
             template_source=template_source,
             children={
                 "role": "value_1_of_role",
                 "task": "value_1_of_task",
-                "question": SomeOfCombinator(
+                "question": JoinSomeOf(
                     id="question_randomizer_1",
                     n_max=1,
                     n_min=1,
@@ -68,16 +68,16 @@ class TemplateCombinatorTests(unittest.TestCase):
     def _generate_multi_path_template_combinator(self):
         template_source = "{{role}}\n{{task}}\n{{question}}\n"
 
-        template_combinator = Jinja2TemplateCombinator(
+        template_combinator = Jinja2Template(
             id="template_1",
             template_source=template_source,
             children={
-                "role": OneOfCombinator(
+                "role": PickOne(
                     "value_1_of_role",
-                    [FixedStringCombinator("key_of_val_2_role", "value_2_of_role")],
+                    [NamedString("key_of_val_2_role", "value_2_of_role")],
                 ),
                 "task": "value_1_of_task",
-                "question": SomeOfCombinator(
+                "question": JoinSomeOf(
                     id="question_randomizer_1",
                     n_max=3,
                     n_min=0,

@@ -1,9 +1,9 @@
 import unittest
 
 from pcombinator.combinators.combinator import Combinator
-from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
-from pcombinator.combinators.some_of_combinator import SomeOfCombinator
-from pcombinator.combinators.template_combinator import Jinja2TemplateCombinator
+from pcombinator.combinators.named_string import NamedString
+from pcombinator.combinators.join_some_of import JoinSomeOf
+from pcombinator.combinators.jinja2_template import Jinja2Template
 
 
 class CombinatorTest(unittest.TestCase):
@@ -12,12 +12,12 @@ class CombinatorTest(unittest.TestCase):
         # Arrange
         seed = 1007
         template_source = "{{role}}\n{{task}}\n{{question}}\n"
-        template_combinator = Jinja2TemplateCombinator(
+        template_combinator = Jinja2Template(
             template_source=template_source,
             children={
-                "role": FixedStringCombinator("role_id", "value_1"),
+                "role": NamedString("role_id", "value_1"),
                 "task": "task_value",
-                "question": SomeOfCombinator(
+                "question": JoinSomeOf(
                     n_max=1,
                     n_min=1,
                     children=["option_1"],

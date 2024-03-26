@@ -3,7 +3,7 @@ from pcombinator.combinators.combinator import Combinator, IdTree, derived_class
 from pcombinator.util.classname import get_fully_qualified_class_name
 
 
-class FixedStringCombinator(Combinator):
+class NamedString(Combinator):
     """
     A combinator that renders a fixed string.
 
@@ -67,4 +67,4 @@ class FixedStringCombinator(Combinator):
         )
 
 
-Combinator.register_derived_class(FixedStringCombinator)
+Combinator.register_derived_class(NamedString)

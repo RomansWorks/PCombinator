@@ -7,9 +7,9 @@ from pcombinator.combinators.combinator import IdTree
 from pcombinator.combinators.tests.test_template_combinator import (
     TemplateCombinatorTests,
 )
-from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
-from pcombinator.combinators.one_of_combinator import OneOfCombinator
-from pcombinator.combinators.some_of_combinator import SomeOfCombinator
+from pcombinator.combinators.named_string import NamedString
+from pcombinator.combinators.pick_one import PickOne
+from pcombinator.combinators.join_some_of import JoinSomeOf
 
 
 @dataclass
@@ -18,9 +18,9 @@ class PromptCandidatesFile:
     seed: int
     root_combinator: Annotated[
         Union[
-            FixedStringCombinator,
-            OneOfCombinator,
-            SomeOfCombinator,
+            NamedString,
+            PickOne,
+            JoinSomeOf,
             TemplateCombinatorTests,
         ],
         # Field(discriminator="duck_type"),

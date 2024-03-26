@@ -1,11 +1,11 @@
 import unittest
-from pcombinator.combinators.one_of_combinator import OneOfCombinator
+from pcombinator.combinators.pick_one import PickOne
 from pcombinator.combinators.combinator import Combinator
 
 
 class OneOfCombinatorTests(unittest.TestCase):
     def test_initialization(self):
-        one_of_combinator = OneOfCombinator(
+        one_of_combinator = PickOne(
             id="id_1",
             seed=123,
             children=["abc", "def"],
@@ -20,7 +20,7 @@ class OneOfCombinatorTests(unittest.TestCase):
         self.assertEqual(one_of_combinator.id, "id_1")
 
     def test_default_values(self):
-        one_of_combinator = OneOfCombinator(id="id_1", children=["a", "b"])
+        one_of_combinator = PickOne(id="id_1", children=["a", "b"])
         self.assertEqual(
             one_of_combinator.combinator_type,
             "pcombinator.combinators.one_of_combinator.type",
@@ -32,7 +32,7 @@ class OneOfCombinatorTests(unittest.TestCase):
 
     def test_generate_paths(self):
         # Arrange
-        one_of_combinator = OneOfCombinator(id="id_1", children=["a", "b"])
+        one_of_combinator = PickOne(id="id_1", children=["a", "b"])
 
         # Act
         paths = one_of_combinator.generate_paths()
@@ -44,7 +44,7 @@ class OneOfCombinatorTests(unittest.TestCase):
 
     def test_render_path(self):
         # Arrange
-        one_of_combinator = OneOfCombinator(id="id_1", children=["a", "b"])
+        one_of_combinator = PickOne(id="id_1", children=["a", "b"])
         paths = one_of_combinator.generate_paths()
 
         # Act

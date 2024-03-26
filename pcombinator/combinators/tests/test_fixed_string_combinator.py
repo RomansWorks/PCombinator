@@ -1,5 +1,5 @@
 import unittest
-from pcombinator.combinators.fixed_string_combinator import FixedStringCombinator
+from pcombinator.combinators.named_string import NamedString
 
 
 class FixedStringCombinatorTest(unittest.TestCase):
@@ -7,7 +7,7 @@ class FixedStringCombinatorTest(unittest.TestCase):
     def test_render_path(self):
         # Arrange
         string = "Hello, World!"
-        combinator = FixedStringCombinator(id="id1", string=string)
+        combinator = NamedString(id="id1", string=string)
 
         # Act
         paths = combinator.generate_paths()
@@ -18,7 +18,7 @@ class FixedStringCombinatorTest(unittest.TestCase):
 
     def test_generate_paths(self):
         # Arrange
-        combinator = FixedStringCombinator(id="id1", string="Hello, World!")
+        combinator = NamedString(id="id1", string="Hello, World!")
 
         # Act
         paths = combinator.generate_paths()

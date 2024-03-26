@@ -1,5 +1,5 @@
 import jinja2
-from pcombinator.combinators.one_of_combinator import OneOfCombinator
+from pcombinator.combinators.pick_one import PickOne
 
 # TODO:
 # 1. Switch to FixedStringCombinator in all cases
@@ -15,7 +15,7 @@ from pcombinator.combinators.one_of_combinator import OneOfCombinator
 # Ability to load the combinators or print the file from actual combinations of IdTree.
 # Consider - ability to adjust probabilities following feedback (need to replace combinators in this case)
 
-role = OneOfCombinator(
+role = PickOne(
     id="default_role",
     children=[
         "You're an expert on the subject.",
@@ -29,7 +29,7 @@ role = OneOfCombinator(
 # TODO: Separate the role as well into level, domain, approach, etc.
 
 
-audience = OneOfCombinator(
+audience = PickOne(
     id="default_audience",
     children=[
         "Your audience is a beginner.",
@@ -38,7 +38,7 @@ audience = OneOfCombinator(
     ],
 )
 
-tip = OneOfCombinator(
+tip = PickOne(
     id="default_tip",
     children=[
         "I'll tip you $5 if you do a good job.",
@@ -47,7 +47,7 @@ tip = OneOfCombinator(
     ],
 )
 
-task = OneOfCombinator(
+task = PickOne(
     id="default_task",
     children=[
         "Your task is to give an overview of the subject and answer the question with the relevant context."
@@ -55,7 +55,7 @@ task = OneOfCombinator(
     ],
 )
 
-cot = OneOfCombinator(
+cot = PickOne(
     id="default_cot",
     children=[
         "Think step by step and first make a list of steps.",
@@ -65,7 +65,7 @@ cot = OneOfCombinator(
     ],
 )
 
-primers = OneOfCombinator(
+primers = PickOne(
     id="default_primers",
     children=[
         "First, let's go through some basic concepts."
@@ -75,7 +75,7 @@ primers = OneOfCombinator(
     ],
 )
 
-instructions = OneOfCombinator(
+instructions = PickOne(
     id="default_instructions",
     children=[
         "First, go through some basic concepts. Then, describe the problem and your approach to solving it. Finally, give the answer.",
@@ -86,7 +86,7 @@ instructions = OneOfCombinator(
     ],
 )
 
-output_format = OneOfCombinator(
+output_format = PickOne(
     id="default_output_format",
     children=[
         "The output should be a single paragraph.",
@@ -95,7 +95,7 @@ output_format = OneOfCombinator(
     ],
 )
 
-shape_of_good_answer = OneOfCombinator(
+shape_of_good_answer = PickOne(
     id="default_shape_of_good_answer",
     children=[
         "A good answer is one that is easy to understand and is correct.",
@@ -103,7 +103,7 @@ shape_of_good_answer = OneOfCombinator(
     ],
 )
 
-tone = OneOfCombinator(
+tone = PickOne(
     id="default_tone",
     children=[
         "Be friendly and professional.",
@@ -111,7 +111,7 @@ tone = OneOfCombinator(
     ],
 )
 
-few_shot = OneOfCombinator(
+few_shot = PickOne(
     id="default_few_shot",
     children=[],
 )

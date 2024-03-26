@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch
-from pcombinator.combinators.some_of_combinator import SomeOfCombinator
+from pcombinator.combinators.join_some_of import JoinSomeOf
 
 
 class SomeOfCombinatorTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.three_values_some_of_combinator = SomeOfCombinator(
+        self.three_values_some_of_combinator = JoinSomeOf(
             id="test_combinator_id_1",
             n_min=2,
             n_max=3,
@@ -14,7 +14,7 @@ class SomeOfCombinatorTests(unittest.TestCase):
             seed=1007,
         )
 
-        self.five_values_some_of_combinator = SomeOfCombinator(
+        self.five_values_some_of_combinator = JoinSomeOf(
             id="test_combinator_id_2",
             n_min=2,
             n_max=4,

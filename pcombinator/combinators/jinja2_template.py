@@ -12,7 +12,7 @@ from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
 from pcombinator.util.classname import get_fully_qualified_class_name
 
 
-class Jinja2TemplateCombinator(Combinator):
+class Jinja2Template(Combinator):
     """
     A combinator that renders a template with its rendered children as arguments.
     """
@@ -122,4 +122,4 @@ class Jinja2TemplateCombinator(Combinator):
         )
 
 
-Combinator.register_derived_class(Jinja2TemplateCombinator)
+Combinator.register_derived_class(Jinja2Template)

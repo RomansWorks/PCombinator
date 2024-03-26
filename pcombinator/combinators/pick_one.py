@@ -2,11 +2,11 @@ import random
 from typing import List, Union
 from pcombinator.combinators.combinator import Combinator, derived_classes
 from pcombinator.combinators.combinator_or_leaf_type import CombinatorOrLeaf
-from pcombinator.combinators.some_of_combinator import SomeOfCombinator
+from pcombinator.combinators.join_some_of import JoinSomeOf
 from pcombinator.util.classname import get_fully_qualified_class_name
 
 
-class OneOfCombinator(SomeOfCombinator):
+class PickOne(JoinSomeOf):
     """
     A combinator which renders exactly one of its children. Based on RandomJoinCombinator.
     """
@@ -41,4 +41,4 @@ class OneOfCombinator(SomeOfCombinator):
         )
 
 
-Combinator.register_derived_class(OneOfCombinator)
+Combinator.register_derived_class(PickOne)
