@@ -56,6 +56,24 @@ Some metrics that can be used to evaluate the effectiveness of the prompts:
 
 A simple example is below. A more full example is in the `examples` folder and at the end of this document. 
 
+### Installation
+
+To install the full package, including the `templating` extension, use:
+
+```bash
+Pip: 
+
+```bash
+pip install PCombinator[templating]
+```
+
+Poetry:
+  
+```bash
+poetry add PCombinator --extras templating
+```
+
+
 ### Simple example - LLMs
 
 ```python
