@@ -143,6 +143,9 @@ To see how a Path is contstructed, please see [Path](docs/path.md).
 
 # TODO: 
 
+<details>
+<summary> List of TODOs. Click to expand. </summary>
+
 - [ ] f-string based template combinator
 - [ ] Consider improving support for templating fields as output (i.e. the output contains a template field that needs to be filled by the user)
 - [ ] Add runtime extension outlets (e.g. for adding a new child to a combinator at a named position at runtime)
@@ -155,9 +158,15 @@ To see how a Path is contstructed, please see [Path](docs/path.md).
 - [ ] Add documentation regarding token counting, prompt distance, compression, and other optimization techniques.
 - [ ] Add additional literature pointers showing the sensitivity of outcomes to minor variation in prompt (specifically find the separators article)
 
+</details>
+<br/>
 
 
 # Persistance
+
+<details>
+<summary>Click to expand</summary>
+<br/>
 
 ## Persisting and loading the Combinator tree
 
@@ -246,9 +255,11 @@ collection = CollectionStore.load(url="path/to/collection")
 
 - [ ] - TODO: Document using promptsfile 
 
+</details>
+
 # Full example
 
-See [Full Example](examples/example.py) for a full example of how to use the library.
+See [Full Example](examples/example.py) for a full example of how to use the library, or click below to expand.
 
 ## Full Example code
 
@@ -730,8 +741,7 @@ Answer: SELECT * FROM employees
 ================================================================================
 ```
 </details>
-
-
+<br/>
 
 
 # Contributing and Developing
