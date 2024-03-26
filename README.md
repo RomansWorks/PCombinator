@@ -154,6 +154,7 @@ To see how a Path is contstructed, please see [Path](docs/path.md).
 - [ ] Support nested templates
 - [ ] Support shared context for combinators - where one combinator's path selection affects / enforces another's selection.
 - [ ] Implement best practices templates according to model type, model, and task. 
+- [ ] Implement a registry loader for pre-built combinators. 
 - [ ] Consider adding support for LLMLingua compression.
 - [ ] Add documentation regarding token counting, prompt distance, compression, and other optimization techniques.
 - [ ] Add additional literature pointers showing the sensitivity of outcomes to minor variation in prompt (specifically find the separators article)
