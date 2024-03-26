@@ -1,4 +1,4 @@
-![Build Status](https://img.shields.io/github/actions/workflow/status/RomansWorks/PCombinator/build)
+![Build Status](https://github.com/RomansWorks/PCombinator/actions/workflows/build.yaml/badge.svg)
 ![Coverage Status](https://img.shields.io/codecov/c/github/RomansWorks/PCombinator)
 ![GitHub](https://img.shields.io/github/license/RomansWorks/PCombinator)
 ![PyPI version](https://img.shields.io/pypi/v/PCombinator)
