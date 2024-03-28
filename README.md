@@ -8,7 +8,7 @@
 
 1. [Premise Order Matters in Reasoning with Large Language Models](https://arxiv.org/pdf/2402.08939.pdf) . Note that this paper also measures how distractors affect the performance of the model.
 2. [The Butterfly Effect of Altering Prompts: How Small Changes and Jailbreaks Affect Large Language Model Performance](https://arxiv.org/abs/2401.03729)
-3. Help needed - additional references on the sensitivity of outcomes to minor variation in prompt (specifically find the separators article) 
+3. **Help needed** - additional references on the sensitivity of outcomes to minor variation in prompt (specifically find the separators article) 
 
 
 # PCombinator
@@ -60,17 +60,20 @@ A simple example is below. A more full example is in the `examples` folder and a
 
 To install the full package, including the `templating` extension, use:
 
-```bash
-Pip: 
+**Pip**: 
 
 ```bash
-pip install PCombinator[templating]
+pip install pcombinator
+# or with templating:
+pip install pcombinator[templating]
 ```
 
-Poetry:
+**Poetry**:
   
 ```bash
-poetry add PCombinator --extras templating
+poetry add pcombinator
+# or with templating:
+poetry add pcombinator --extras templating
 ```
 
 
@@ -107,30 +110,27 @@ template_combinator = Jinja2Template(
     },
 )
 
-# # OPTIONAL: Save the combinator tree for future use
-# json_str = template_combinator.to_json()
-# with open("path/to/combinator.json", "w") as f:
-#     f.write(json_str)
-# # Loading the combinator tree looks as following:
-# with open("path/to/combinator.json", "r") as f:
-#     json_str = f.read()
-#     loaded_combinator = Combinator.from_json(json_str)
-
 # Create all the possible paths in the tree
 paths = template_combinator.generate_paths()
 
 res = []
+# Print out each created prompt and the path used to create it
 for idx, path in enumerate(paths):
-  # Render the path (creating the prompt)
+
+  # Render - this takes the path and creates the prompt
   rendered_prompt = root_combinator.render_path(path)
+
+  # Save the prompt and the path for later evaluation
   res.append((rendered_prompt, path))
+
+  # Print the prompt and the path
   print(rendered_prompt)
   print("-" * 80)
   print(path)
   print("=" * 80)
 
 
-# Save the prompts and id_tree for later evaluation
+# Save the prompts and paths for later evaluation
 with open("path/to/prompt.json", "w") as f:
     f.write(json.dumps(res))
 
@@ -178,7 +178,7 @@ To see how a Path is contstructed, please see [Path](docs/path.md).
 - [ ] f-string based template combinator
 - [ ] Consider improving support for templating fields as output (i.e. the output contains a template field that needs to be filled by the user)
 - [ ] Add runtime extension outlets (e.g. for adding a new child to a combinator at a named position at runtime)
-- [ ] Show example how trees can be edited in runtime.
+- [ ] Add runtime usage documentation - creating, replacing/editing, rendering.
 - [ ] Implement the evaluator
 - [ ] Support nested templates
 - [ ] Support shared context for combinators - where one combinator's path selection affects / enforces another's selection.
@@ -188,6 +188,8 @@ To see how a Path is contstructed, please see [Path](docs/path.md).
 - [ ] Add documentation regarding token counting, prompt distance, compression, and other optimization techniques.
 - [ ] Add additional literature pointers showing the sensitivity of outcomes to minor variation in prompt (specifically find the separators article)
 - [ ] Add vision model examples
+- [ ] Document how context + filter / combinators can be used to filter only some examples to add to prompt in runtime.
+- [ ] Partial application user story
 
 </details>
 <br/>

@@ -1,15 +1,25 @@
 [tool.poetry]
-name = "PCombinator"
-version = "0.0.1"
+name = "pcombinator"
+version = "0.0.3"
 description = "A tool for composing variations of prompts"
 authors = ["Roman Baron <1299323+RomansWorks@users.noreply.github.com>"]
 license = "Apache 2.0"
 readme = "README.md"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.9",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Text Processing :: Filters"
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
 versioned_collection = "^0.0.1"
-jinja2 = {version="^3.1.2", optional=true}
+jinja2 = { version = "^3.1.2", optional = true }
 
 
 [tool.poetry.dev-dependencies]
